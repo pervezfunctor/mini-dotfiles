@@ -82,7 +82,7 @@ essential_install() {
 }
 
 dotfiles_install() {
-    sclone https://github.com/seartipy.git ~/.seartipy
+    sclone https://github.com/pervezfunctor/mini-dotfiles.git ~/.seartipy
 }
 
 # zsh
