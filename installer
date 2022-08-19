@@ -2,10 +2,6 @@
 
 {
 
-CUR_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd .. && pwd )"
-
-source "$CUR_DIR/scripts/utils.sh"
-
 # utils
 
 slog() {
@@ -23,6 +19,14 @@ ${BOLD}${RED}FATAL: ${RESET} $1
 
 has_cmd() {
     command -v "$1" > /dev/null
+}
+
+
+is_ubuntu() {
+    has_cmd lsb_release || return 1
+    local OS
+    OS=$(lsb_release -i | cut -d ':' -f2)
+    [[ "$OS" == *"Ubuntu" ]] || [[ "$OS" == *"neon" ]] || [[ "$OS" == *"elementary" ]] || [[ "$OS" == *"LinuxMint" ]] || [[ "$OS" == *"Pop" ]]
 }
 
 sclone() {
@@ -46,7 +50,7 @@ fln() {
     if [ -e "$1" ]; then
         rm -f "$2"
     else
-        warn "$1 does not exist, cannot create link $2"
+        echo "$1 does not exist, cannot create link $2"
         return 1
     fi
     slog "Creating link $2 to $1"
@@ -73,7 +77,7 @@ essential_install() {
     fi
 
     slog "Installing essential packages"
-    apti curl wget git trash-cli tree fzf ripgre p7zip build-essential
+    apti curl wget git trash-cli tree fzf ripgrep p7zip build-essential
     apti tmux unar unzip libzmq3-dev pkg-config zip gawk urlview
     apti python-is-python3 zsh shellcheck git git-extras
 
@@ -95,7 +99,7 @@ zsh_install() {
     sclone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.zsh/zsh-syntax-highlighting
     sclone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
 
-    fln ~/.seartipy/mini/zshrc ~/.zshrc
+    fln ~/.seartipy/zshrc ~/.zshrc
 }
 
 # web
@@ -106,12 +110,16 @@ pnpm_install() {
     slog "Installing node"
     curl -fsSL https://get.pnpm.io/install.sh | sh -
     pnpm env use --global latest
+
+    export PNPM_HOME="$HOME/.local/share/pnpm"
+    export PATH="$PNPM_HOME:$PATH"
 }
 
 web_install() {
     pnpm_install
 
-    npm install -g bash-language-server npm-check-updates
+    slog "Installign npm packages"
+    npm install -g npm-check-updates degit
 
     if ! grep "fs.inotify.max_user_watches" /etc/sysctl.conf > /dev/null; then
         echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf > /dev/null && sudo sysctl -p
@@ -124,7 +132,7 @@ keep_sudo_running() {
 }
 
 installer() {
-    essential_installS
+    essential_install
     web_install
 
     echo "Set zsh as your default shell(this sometimes fails)"
@@ -143,6 +151,9 @@ keep_sudo_running
 
 smd ~/bin
 export PATH="$HOME/bin:$PATH"
+export PNPM_HOME="$HOME/.local/share/pnpm"
+export PATH="$PNPM_HOME:$PATH"
+
 
 installer > >(tee ~/seartipy-output.log) 2> >(tee ~/seartipy-error.log >&2)
 
