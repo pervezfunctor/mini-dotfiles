@@ -12,16 +12,17 @@ dir_exists() {
 }
 
 dir_exists ~/.zsh/pure || git clone --depth=1 https://github.com/sindresorhus/pure.git ~/.zsh/pure
-dir_exists ~/.zsh/zsh-syntax-highlighting || git clone --depth=1 https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.zsh/zsh-syntax-highlighting
-dir_exists ~/.zsh/zsh-autosuggestions || git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
 
 fpath+=($HOME/.zsh/pure)
 
 autoload -U promptinit; promptinit
 prompt pure
 
-source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /usr/share/doc/fzf/examples/key-bindings.zsh
+
+eval "$(fasd --init auto)"
 
 # pnpm
 export PNPM_HOME="/home/pervez/.local/share/pnpm"

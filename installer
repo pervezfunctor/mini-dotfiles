@@ -79,7 +79,8 @@ essential_install() {
     slog "Installing essential packages"
     apti curl wget git trash-cli tree fzf ripgrep p7zip build-essential
     apti tmux unar unzip libzmq3-dev pkg-config zip gawk urlview
-    apti python-is-python3 zsh shellcheck git git-extras
+    apti python-is-python3 zsh shellcheck git git-extras fasd
+    apti zsh-syntax-highlighting zsh-autosuggestions
 
     dotfiles_install
     zsh_install
@@ -96,8 +97,6 @@ zsh_install() {
 
     smd ~/.zsh
     sclone https://github.com/sindresorhus/pure.git ~/.zsh/pure
-    sclone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.zsh/zsh-syntax-highlighting
-    sclone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
 
     fln ~/.seartipy/zshrc ~/.zshrc
 }
