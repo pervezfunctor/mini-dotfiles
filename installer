@@ -1,0 +1,151 @@
+#! /usr/bin/env bash
+
+{
+
+CUR_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd .. && pwd )"
+
+source "$CUR_DIR/scripts/utils.sh"
+
+# utils
+
+slog() {
+    echo "
+${BOLD}${GREEN}SEARTIPY: ${RESET} $1
+"
+}
+
+err_exit() {
+    echo "
+${BOLD}${RED}FATAL: ${RESET} $1
+"
+    exit 1
+}
+
+has_cmd() {
+    command -v "$1" > /dev/null
+}
+
+sclone() {
+    local dest=${*: -1}
+    local src=${*: -2:1}
+
+    [ -d "$dest" ] && return 1
+
+    slog "Cloning $src to $dest"
+    git clone "$@"
+}
+
+smd() {
+    [ -d "$1" ] && return 1
+
+    slog "Creating directory $1"
+    mkdir -p "$1" 2> /dev/null
+}
+
+fln() {
+    if [ -e "$1" ]; then
+        rm -f "$2"
+    else
+        warn "$1 does not exist, cannot create link $2"
+        return 1
+    fi
+    slog "Creating link $2 to $1"
+    ln -s "$1" "$2"
+}
+
+# essential
+
+apti() {
+    for p in "$@"; do
+        slog "Installing package $p"
+        sudo apt-get install -y "$p"
+    done
+}
+
+essential_install() {
+
+    apti software-properties-common apt-transport-https ca-certificates
+
+    slog "Updating ubuntu"
+
+    if ! { sudo apt-get update && sudo apt-get upgrade -y; }; then
+        err_exit "apt-get update/upgrade failed, quitting"
+    fi
+
+    slog "Installing essential packages"
+    apti curl wget git trash-cli tree fzf ripgre p7zip build-essential
+    apti tmux unar unzip libzmq3-dev pkg-config zip gawk urlview
+    apti python-is-python3 zsh shellcheck git git-extras
+
+    dotfiles_install
+    zsh_install
+}
+
+dotfiles_install() {
+    sclone https://github.com/seartipy.git ~/.seartipy
+}
+
+# zsh
+
+zsh_install() {
+    slog "Installing zsh"
+
+    smd ~/.zsh
+    sclone https://github.com/sindresorhus/pure.git ~/.zsh/pure
+    sclone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.zsh/zsh-syntax-highlighting
+    sclone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
+
+    fln ~/.seartipy/mini/zshrc ~/.zshrc
+}
+
+# web
+
+pnpm_install() {
+    has_cmd pnpm && return 0
+
+    slog "Installing node"
+    curl -fsSL https://get.pnpm.io/install.sh | sh -
+    pnpm env use --global latest
+}
+
+web_install() {
+    pnpm_install
+
+    npm install -g bash-language-server npm-check-updates
+
+    if ! grep "fs.inotify.max_user_watches" /etc/sysctl.conf > /dev/null; then
+        echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf > /dev/null && sudo sysctl -p
+    fi
+}
+
+keep_sudo_running() {
+    sudo -v
+    while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+}
+
+installer() {
+    essential_installS
+    web_install
+
+    echo "Set zsh as your default shell(this sometimes fails)"
+    chsh -s /bin/zsh
+
+    echo "Installation done!"
+}
+
+is_ubuntu || err_exit "This installer works only on Ubuntu. Quitting."
+
+curdir=$(pwd)
+
+rm -f  ~/seartipy-error.log ~/seartipy-output.log 2> /dev/null
+
+keep_sudo_running
+
+smd ~/bin
+export PATH="$HOME/bin:$PATH"
+
+installer > >(tee ~/seartipy-output.log) 2> >(tee ~/seartipy-error.log >&2)
+
+cd "$curdir"
+
+}
