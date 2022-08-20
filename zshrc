@@ -10,6 +10,7 @@ setopt PUSHD_SILENT
 
 autoload -Uz compinit
 compinit
+zstyle ':completion:::::default' menu yes select
 
 dir_exists() {
     [[ -d "$1" ]]
@@ -53,6 +54,10 @@ fi
 
 dir_exists ~/.zsh/alias-tips || git clone --depth=1  https://github.com/djui/alias-tips.git ~/.zsh/alias-tips
 source ~/.zsh/alias-tips/alias-tips.plugin.zsh
+
+if ! has_cmd fasd; then
+    sudo apt-get install -y fasd
+fi
 
 has_cmd fasd && eval "$(fasd --init auto)"
 
