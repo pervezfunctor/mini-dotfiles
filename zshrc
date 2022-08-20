@@ -42,8 +42,8 @@ fi
 if file_exists /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh; then
     source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 else
-    dir_exists ~/.zsh/zsh-syntax-highlighting || git clone --depth=1  https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
-    source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+    dir_exists ~/.zsh/zsh-autosuggestions || git clone --depth=1  https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
+    source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 fi
 
 if file_exists /usr/share/doc/fzf/examples/key-bindings.zsh; then
