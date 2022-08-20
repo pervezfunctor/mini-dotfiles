@@ -67,14 +67,13 @@ apti() {
 }
 
 essential_install() {
-
-    apti software-properties-common apt-transport-https ca-certificates
-
     slog "Updating ubuntu"
 
     if ! { sudo apt-get update && sudo apt-get upgrade -y; }; then
         err_exit "apt-get update/upgrade failed, quitting"
     fi
+
+    apti software-properties-common apt-transport-https ca-certificates
 
     slog "Installing essential packages"
     apti curl wget git trash-cli tree fzf ripgrep p7zip build-essential
