@@ -78,9 +78,9 @@ essential_install() {
 
     slog "Installing essential packages"
     apti curl wget git trash-cli tree fzf ripgrep p7zip build-essential
-    apti tmux unar unzip libzmq3-dev pkg-config zip gawk urlview
+    apti tmux unar unzip libzmq3-dev pkg-config zip gawk urlview bat
     apti python-is-python3 zsh shellcheck git git-extras fasd
-    apti zsh-syntax-highlighting zsh-autosuggestions
+    apti zsh-syntax-highlighting zsh-autosuggestions fd-find zoxide exa
 
     dotfiles_install
     zsh_install
@@ -112,13 +112,16 @@ pnpm_install() {
 
     export PNPM_HOME="$HOME/.local/share/pnpm"
     export PATH="$PNPM_HOME:$PATH"
+
+    pnpm install-completion bash
+    pnpm install-completion zsh
 }
 
 web_install() {
     pnpm_install
 
     slog "Installign npm packages"
-    npm install -g npm-check-updates degit
+    npm install -g npm-check-updates degit tldr gtop
 
     if ! grep "fs.inotify.max_user_watches" /etc/sysctl.conf > /dev/null; then
         echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf > /dev/null && sudo sysctl -p
