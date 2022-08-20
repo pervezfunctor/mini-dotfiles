@@ -10,7 +10,7 @@ setopt PUSHD_SILENT
 
 autoload -Uz compinit
 compinit
-zstyle ':completion:::::default' menu yes select
+zstyle ':completion:::::default' menu select
 
 dir_exists() {
     [[ -d "$1" ]]
