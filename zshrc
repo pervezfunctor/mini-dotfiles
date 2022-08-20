@@ -51,6 +51,9 @@ if file_exists /usr/share/doc/fzf/examples/key-bindings.zsh; then
     source /usr/share/doc/fzf/examples/key-bindings.zsh
 fi
 
+dir_exists ~/.zsh/alias-tips || git clone --depth=1  https://github.com/djui/alias-tips.git ~/.zsh/alias-tips
+source ~/.zsh/alias-tips/alias-tips.plugin.zsh
+
 has_cmd fasd && eval "$(fasd --init auto)"
 
 # pnpm
