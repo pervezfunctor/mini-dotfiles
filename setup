@@ -62,7 +62,7 @@ fln() {
 apti() {
     for p in "$@"; do
         slog "Installing package $p"
-        export DEBIAN_FRONTEND=noninteractive sudo apt-get -y install --no-install-recommends "$p"
+        DEBIAN_FRONTEND=noninteractive sudo apt-get -y install --no-install-recommends "$p"
     done
 }
 
@@ -107,6 +107,7 @@ installer() {
     echo "Set zsh as default"
     sudo chsh -s $(which zsh) $(whoami)
 
+    sudo apt-get autoremove -y
     slog "Installation done!"
 }
 
