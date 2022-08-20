@@ -104,8 +104,8 @@ installer() {
     dotfiles_install
     zsh_install
 
-    echo "Set zsh as your default shell(this sometimes fails)"
-    chsh -s /bin/zsh
+    echo "Set zsh as default"
+    sudo chsh -s $(which zsh) $(whoami)
 
     slog "Installation done!"
 }
@@ -125,6 +125,7 @@ keep_sudo_running
 
 smd ~/bin
 export PATH="$HOME/bin:$PATH"
+export DEBIAN_FRONTEND=noninteractive
 
 installer > >(tee ~/seartipy-output.log) 2> >(tee ~/seartipy-error.log >&2)
 
