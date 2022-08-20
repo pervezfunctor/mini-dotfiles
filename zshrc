@@ -56,7 +56,7 @@ dir_exists ~/.zsh/alias-tips || git clone --depth=1  https://github.com/djui/ali
 source ~/.zsh/alias-tips/alias-tips.plugin.zsh
 
 if ! has_cmd fasd; then
-    sudo apt-get install -y fasd
+    has_cmd apt-get && sudo apt-get install -y fasd
 fi
 
 has_cmd fasd && eval "$(fasd --init auto)"
