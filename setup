@@ -99,11 +99,6 @@ zsh_install() {
     fln ~/.seartipy/zshrc ~/.zshrc
 }
 
-keep_sudo_running() {
-    sudo -v
-    while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
-}
-
 installer() {
     essential_install
     dotfiles_install
@@ -113,6 +108,11 @@ installer() {
     chsh -s /bin/zsh
 
     echo "Installation done!"
+}
+
+keep_sudo_running() {
+    sudo -v
+    while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 }
 
 is_ubuntu || err_exit "This installer works only on Ubuntu. Quitting."
