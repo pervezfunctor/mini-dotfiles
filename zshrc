@@ -87,3 +87,8 @@ alias gb='git branch'
 alias gbc='git checkout -b'
 alias gbc='git checkout -b'
 alias gsl='git stash list'
+
+if has_cmd code; then
+    alias c='code'
+    alias c.='code .'
+fi
