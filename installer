@@ -81,9 +81,6 @@ essential_install() {
     apti tmux unar unzip libzmq3-dev pkg-config zip gawk urlview
     apti python-is-python3 zsh shellcheck git git-extras fasd
     apti zsh-syntax-highlighting zsh-autosuggestions fd-find zoxide exa
-
-    dotfiles_install
-    zsh_install
 }
 
 dotfiles_install() {
@@ -97,35 +94,9 @@ zsh_install() {
 
     smd ~/.zsh
     sclone https://github.com/sindresorhus/pure.git ~/.zsh/pure
+    sclone https://github.com/djui/alias-tips.git ~/.zsh/alias-tips
 
     fln ~/.seartipy/zshrc ~/.zshrc
-}
-
-# web
-
-pnpm_install() {
-    has_cmd pnpm && return 0
-
-    slog "Installing node"
-    curl -fsSL https://get.pnpm.io/install.sh | sh -
-    pnpm env use --global latest
-
-    export PNPM_HOME="$HOME/.local/share/pnpm"
-    export PATH="$PNPM_HOME:$PATH"
-
-    pnpm install-completion bash
-    pnpm install-completion zsh
-}
-
-web_install() {
-    pnpm_install
-
-    slog "Installign npm packages"
-    pnpm install -g npm-check-updates degit tldr gtop
-
-    if ! grep "fs.inotify.max_user_watches" /etc/sysctl.conf > /dev/null; then
-        echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf > /dev/null && sudo sysctl -p
-    fi
 }
 
 keep_sudo_running() {
@@ -135,7 +106,8 @@ keep_sudo_running() {
 
 installer() {
     essential_install
-    web_install
+    dotfiles_install
+    zsh_install
 
     echo "Set zsh as your default shell(this sometimes fails)"
     chsh -s /bin/zsh
@@ -153,9 +125,6 @@ keep_sudo_running
 
 smd ~/bin
 export PATH="$HOME/bin:$PATH"
-export PNPM_HOME="$HOME/.local/share/pnpm"
-export PATH="$PNPM_HOME:$PATH"
-
 
 installer > >(tee ~/seartipy-output.log) 2> >(tee ~/seartipy-error.log >&2)
 

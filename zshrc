@@ -56,10 +56,11 @@ source ~/.zsh/alias-tips/alias-tips.plugin.zsh
 
 has_cmd fasd && eval "$(fasd --init auto)"
 
-# pnpm
 if dir_exists "$HOME/.local/share/pnpm"; then
+# pnpm
     export PNPM_HOME="$HOME/.local/share/pnpm"
     export PATH="$PNPM_HOME:$PATH"
+# pnpm end
 
     # tabtab source for packages
     # uninstall by removing these lines
@@ -74,7 +75,6 @@ if dir_exists "$HOME/.local/share/pnpm"; then
     alias ntt='pnpm test'
     alias ntt='pnpm test'
 fi
-# pnpm end
 
 
 alias g='git'
