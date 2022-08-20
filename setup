@@ -62,7 +62,7 @@ fln() {
 apti() {
     for p in "$@"; do
         slog "Installing package $p"
-        sudo apt-get install -y "$p"
+        export DEBIAN_FRONTEND=noninteractive sudo apt-get -y install --no-install-recommends "$p"
     done
 }
 
