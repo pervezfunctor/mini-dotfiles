@@ -59,5 +59,31 @@ if dir_exists "$HOME/.local/share/pnpm"; then
     # tabtab source for packages
     # uninstall by removing these lines
     [[ -f ~/.config/tabtab/zsh/__tabtab.zsh ]] && . ~/.config/tabtab/zsh/__tabtab.zsh || true
+
+    alias n='pnpm'
+    alias ni='pnpm install'
+    alias ne='pnpm exec'
+    alias nd='pnpm dev'
+    alias nt='pnpm types'
+    alias nc='pnpm ci'
+    alias ntt='pnpm test'
+    alias ntt='pnpm test'
 fi
 # pnpm end
+
+
+alias g='git'
+alias gst="git status"
+alias gsu="git status -u"
+alias gcan="git commit --amend --no-edit"
+alias gsa='git stash apply'
+alias gfm='git pull'
+alias gp='git push'
+alias gcm='git commit --message'
+alias gia='git add'
+alias gl='git log --topo-order --pretty=format:"$_git_log_medium_format"'
+alias gco='git checkout'
+alias gb='git branch'
+alias gbc='git checkout -b'
+alias gbc='git checkout -b'
+alias gsl='git stash list'
