@@ -30,6 +30,8 @@ fpath+=($HOME/.zsh/pure)
 autoload -U promptinit; promptinit
 prompt pure
 
+file_exists /etc/zsh_command_not_found && source /etc/zsh_command_not_found
+
 if file_exists /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh; then
     source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 else
