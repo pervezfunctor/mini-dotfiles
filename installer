@@ -78,7 +78,7 @@ essential_install() {
 
     slog "Installing essential packages"
     apti curl wget git trash-cli tree fzf ripgrep p7zip build-essential
-    apti tmux unar unzip libzmq3-dev pkg-config zip gawk urlview bat
+    apti tmux unar unzip libzmq3-dev pkg-config zip gawk urlview
     apti python-is-python3 zsh shellcheck git git-extras fasd
     apti zsh-syntax-highlighting zsh-autosuggestions fd-find zoxide exa
 
