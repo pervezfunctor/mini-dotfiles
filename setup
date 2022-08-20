@@ -26,7 +26,7 @@ is_ubuntu() {
     has_cmd lsb_release || return 1
     local OS
     OS=$(lsb_release -i | cut -d ':' -f2)
-    [[ "$OS" == *"Ubuntu" ]] || [[ "$OS" == *"neon" ]] || [[ "$OS" == *"elementary" ]] || [[ "$OS" == *"LinuxMint" ]] || [[ "$OS" == *"Pop" ]]
+    [[ "$OS" == *"Ubuntu" ]]
 }
 
 sclone() {
@@ -75,7 +75,7 @@ essential_install() {
 
     apti software-properties-common apt-transport-https ca-certificates
 
-    slog "Installing essential packages"
+    slog "Installing essential ubuntu packages"
     apti curl wget git trash-cli tree fzf ripgrep p7zip build-essential
     apti tmux unar unzip libzmq3-dev pkg-config zip gawk urlview
     apti python-is-python3 zsh shellcheck git git-extras fasd
@@ -99,6 +99,7 @@ zsh_install() {
 }
 
 installer() {
+    slog "Installing..."
     essential_install
     dotfiles_install
     zsh_install
@@ -106,7 +107,7 @@ installer() {
     echo "Set zsh as your default shell(this sometimes fails)"
     chsh -s /bin/zsh
 
-    echo "Installation done!"
+    slog "Installation done!"
 }
 
 keep_sudo_running() {

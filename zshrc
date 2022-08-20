@@ -24,6 +24,12 @@ has_cmd() {
     command -v "$1" > /dev/null
 }
 
+ssource() {
+    if [ -f "$1" ]; then
+        source "$1"
+    fi
+}
+
 dir_exists ~/.zsh/pure || git clone --depth=1 https://github.com/sindresorhus/pure.git ~/.zsh/pure
 
 fpath+=($HOME/.zsh/pure)
@@ -31,29 +37,31 @@ fpath+=($HOME/.zsh/pure)
 autoload -U promptinit; promptinit
 prompt pure
 
-file_exists /etc/zsh_command_not_found && source /etc/zsh_command_not_found
+ssource /etc/zsh_command_not_found
 
 if file_exists /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh; then
     source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 else
-    dir_exists ~/.zsh/zsh-syntax-highlighting || git clone --depth=1  https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.zsh/zsh-syntax-highlighting
-    source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+    if ! dir_exists ~/.zsh/zsh-syntax-highlighting; then
+        git clone --depth=1  https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.zsh/zsh-syntax-highlighting
+    fi
+    ssource ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 fi
 
 if file_exists /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh; then
     source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 else
-    dir_exists ~/.zsh/zsh-autosuggestions || git clone --depth=1  https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
-    source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+    if ! dir_exists ~/.zsh/zsh-autosuggestions; then
+        git clone --depth=1  https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
+    fi
+    ssource ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 fi
 
-if file_exists /usr/share/doc/fzf/examples/key-bindings.zsh; then
-    source /usr/share/doc/fzf/examples/completion.zsh
-    source /usr/share/doc/fzf/examples/key-bindings.zsh
-fi
+ssource /usr/share/doc/fzf/examples/completion.zsh
+ssource /usr/share/doc/fzf/examples/key-bindings.zsh
 
 dir_exists ~/.zsh/alias-tips || git clone --depth=1  https://github.com/djui/alias-tips.git ~/.zsh/alias-tips
-source ~/.zsh/alias-tips/alias-tips.plugin.zsh
+ssource ~/.zsh/alias-tips/alias-tips.plugin.zsh
 
 if ! has_cmd fasd; then
     has_cmd apt-get && sudo apt-get install -y fasd
@@ -62,10 +70,10 @@ fi
 has_cmd fasd && eval "$(fasd --init auto)"
 
 if dir_exists "$HOME/.local/share/pnpm"; then
-# pnpm
+    # pnpm
     export PNPM_HOME="$HOME/.local/share/pnpm"
     export PATH="$PNPM_HOME:$PATH"
-# pnpm end
+    # pnpm end
 
     # tabtab source for packages
     # uninstall by removing these lines
