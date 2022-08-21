@@ -137,7 +137,7 @@ is_apt || err_exit "This installer works only on Ubuntu or Debian. Quitting."
 
 curdir=$(pwd)
 
-rm -f ~/seartipy-error.log ~/seartipy-output.log 2> /dev/null
+rm -f ~/.seartipy-error.log ~/.seartipy-output.log 2> /dev/null
 
 slog "Installing..."
 
@@ -147,7 +147,7 @@ smd ~/bin
 export PATH="$HOME/bin:$PATH"
 export DEBIAN_FRONTEND=noninteractive
 
-installer > >(tee ~/seartipy-output.log) 2> >(tee ~/seartipy-error.log >&2)
+installer > >(tee ~/.seartipy-output.log) 2> >(tee ~/.seartipy-error.log >&2)
 
 cd "$curdir"
 
