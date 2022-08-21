@@ -1,6 +1,7 @@
 # Installation
 
-If you are only interested in `zsh` configuration, just link or copy zshrc from this repo to ~/.zshrc
+If you are only interested in `zsh` configuration, just link or copy zshrc from this repo to ~/.zshrc.
+For example
 
 ```bash
   git clone https://github.com/pervezfunctor/mini-dotfiles.git ~/.config/mini-seartipy
@@ -24,3 +25,5 @@ If you want nodejs installation, along with pnpm, you can run the following comm
 ```
 
 Above command installs latest nodejs version. If you want a different version, you could use [pnpm's env](https://pnpm.io/cli/env) command.
+
+This repository can also be used as [dotfiles for a devcontainer](https://code.visualstudio.com/docs/remote/containers#_personalizing-with-dotfile-repositories).
