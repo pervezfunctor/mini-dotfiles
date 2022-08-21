@@ -21,12 +21,23 @@ has_cmd() {
     command -v "$1" > /dev/null
 }
 
+is_debian() {
+    has_cmd lsb_release || return 1
+
+    local OS
+    OS=$(lsb_release -i | cut -d ':' -f2)
+    [[ "$OS" == *"Debian" ]]
+}
 
 is_ubuntu() {
     has_cmd lsb_release || return 1
     local OS
     OS=$(lsb_release -i | cut -d ':' -f2)
-    [[ "$OS" == *"Ubuntu" ]] || [[ "$OS" == *"Debian" ]]
+    [[ "$OS" == *"Ubuntu" ]]
+}
+
+is_apt() {
+    is_ubuntu || is_debian
 }
 
 sclone() {
@@ -62,7 +73,8 @@ fln() {
 apti() {
     for p in "$@"; do
         slog "Installing package $p"
-        DEBIAN_FRONTEND=noninteractive sudo apt-get -y install --no-install-recommends "$p"
+        is_debian && sudo apt-get -y install --no-install-recommends "$p"
+        is_ubuntu && sudo apt-get -y install "$p"
     done
 }
 
@@ -76,10 +88,14 @@ essential_install() {
     apti software-properties-common apt-transport-https ca-certificates
 
     slog "Installing essential ubuntu packages"
-    apti curl wget git trash-cli tree fzf ripgrep p7zip build-essential
-    apti tmux unar unzip libzmq3-dev pkg-config zip gawk urlview
-    apti python-is-python3 zsh shellcheck git git-extras fasd
-    apti zsh-syntax-highlighting zsh-autosuggestions fd-find zoxide exa
+    apti curl wget git trash-cli tree fzf ripgrep
+    apti tmux libzmq3-dev pkg-config urlview
+    apti zsh fasd zsh-syntax-highlighting zsh-autosuggestions fd-find
+
+    if is_ubuntu; then
+        apti unar unzip p7zip build-essential zoxide exa python-is-python3
+        apti shellcheck git-extras zip gawk
+    fi
 }
 
 dotfiles_install() {
@@ -92,14 +108,13 @@ zsh_install() {
     slog "Installing zsh"
 
     smd ~/.zsh
-    sclone https://github.com/sindresorhus/pure.git ~/.zsh/pure
-    sclone https://github.com/djui/alias-tips.git ~/.zsh/alias-tips
+    sclone --depth=1 https://github.com/sindresorhus/pure.git ~/.zsh/pure
+    sclone --depth=1 https://github.com/djui/alias-tips.git ~/.zsh/alias-tips
 
     fln ~/.seartipy/zshrc ~/.zshrc
 }
 
 installer() {
-    slog "Installing..."
     essential_install
     dotfiles_install
     zsh_install
@@ -116,11 +131,13 @@ keep_sudo_running() {
     while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 }
 
-is_ubuntu || err_exit "This installer works only on Ubuntu. Quitting."
+is_apt || err_exit "This installer works only on Ubuntu or Debian. Quitting."
 
 curdir=$(pwd)
 
-rm -f  ~/seartipy-error.log ~/seartipy-output.log 2> /dev/null
+rm -f ~/seartipy-error.log ~/seartipy-output.log 2> /dev/null
+
+slog "Installing..."
 
 keep_sudo_running
 

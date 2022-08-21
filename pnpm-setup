@@ -9,13 +9,11 @@ has_cmd() {
 pnpm_install() {
     has_cmd pnpm && return 0
 
-    echo "Installing node"
+    echo "Installing pnpm"
     curl -fsSL https://get.pnpm.io/install.sh | sh -
 
+    echo "Installing node"
     pnpm env use --global latest
-
-    export PNPM_HOME="$HOME/.local/share/pnpm"
-    export PATH="$PNPM_HOME:$PATH"
 
     pnpm install-completion bash
     pnpm install-completion zsh
@@ -24,7 +22,7 @@ pnpm_install() {
 installer() {
     pnpm_install
 
-    echo "Installign npm packages"
+    echo "Installing npm packages"
     pnpm install -g npm-check-updates degit tldr gtop
 
     if ! grep "fs.inotify.max_user_watches" /etc/sysctl.conf > /dev/null; then
@@ -38,8 +36,10 @@ export PNPM_HOME="$HOME/.local/share/pnpm"
 export PATH="$PNPM_HOME:$PATH"
 
 curdir=$(pwd)
+
 rm -f ~/seartipy-error.log ~/seartipy-output.log 2> /dev/null
 installer > >(tee ~/seartipy-output.log) 2> >(tee ~/seartipy-error.log >&2)
+
 cd "$curdir"
 
 }
