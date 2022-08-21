@@ -2,6 +2,8 @@
 
 {
 
+DOT_DIR=~/.config/mini-seartipy
+
 # utils
 
 slog() {
@@ -99,7 +101,7 @@ essential_install() {
 }
 
 dotfiles_install() {
-    sclone https://github.com/pervezfunctor/mini-dotfiles.git ~/.seartipy
+    sclone https://github.com/pervezfunctor/mini-dotfiles.git "$HOME/${DOT_DIR}"
 }
 
 # zsh
@@ -111,7 +113,7 @@ zsh_install() {
     sclone --depth=1 https://github.com/sindresorhus/pure.git ~/.zsh/pure
     sclone --depth=1 https://github.com/djui/alias-tips.git ~/.zsh/alias-tips
 
-    fln ~/.seartipy/zshrc ~/.zshrc
+    fln "$HOME/${DOT_DIR}/zshrc ~/.zshrc"
 }
 
 installer() {
