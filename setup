@@ -101,7 +101,7 @@ essential_install() {
 }
 
 dotfiles_install() {
-    sclone https://github.com/pervezfunctor/mini-dotfiles.git "$HOME/${DOT_DIR}"
+    sclone https://github.com/pervezfunctor/mini-dotfiles.git "${DOT_DIR}"
 }
 
 # zsh
@@ -113,7 +113,7 @@ zsh_install() {
     sclone --depth=1 https://github.com/sindresorhus/pure.git ~/.zsh/pure
     sclone --depth=1 https://github.com/djui/alias-tips.git ~/.zsh/alias-tips
 
-    fln "$HOME/${DOT_DIR}/zshrc ~/.zshrc"
+    fln "${DOT_DIR}/zshrc ~/.zshrc"
 }
 
 installer() {
