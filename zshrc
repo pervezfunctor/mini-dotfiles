@@ -4,12 +4,18 @@ SAVEHIST=1000
 bindkey -e
 zstyle :compinstall filename '$HOME/.zshrc'
 
+setopt AUTO_CD
 setopt AUTO_PUSHD
 setopt PUSHD_IGNORE_DUPS
 setopt PUSHD_SILENT
+setopt PUSHD_TO_HOME
+setopt EXTENDED_GLOB
+setopt AUTO_MENU            # Show completion menu on a successive tab press.
+setopt AUTO_LIST            # Automatically list choices on ambiguous completion.
 
 autoload -Uz compinit
 compinit
+
 zstyle ':completion:::::default' menu select
 
 dir_exists() {
@@ -110,3 +116,14 @@ if has_cmd code; then
     alias c='code'
     alias c.='code .'
 fi
+
+alias l='ls -1A'         # Lists in one column, hidden files.
+alias ll='ls -lh'        # Lists human readable sizes.
+alias lr='ll -R'         # Lists human readable sizes, recursively.
+alias la='ll -A'         # Lists human readable sizes, hidden files.
+alias lm='la | "$PAGER"' # Lists human readable sizes, hidden files through pager.
+alias lk='ll -Sr'        # Lists sorted by size, largest last.
+alias lt='ll -tr'        # Lists sorted by date, most recent last.
+alias lc='lt -c'         # Lists sorted by date, most recent last, shows change time.
+alias lu='lt -u'         # Lists sorted by date, most recent last, shows access time.
+alias sl='ls'            # Correction for common spelling error.
