@@ -65,22 +65,27 @@ dnfi() {
 }
 
 essential_install() {
-    slog "Updating ubuntu"
+    slog "Updating fedora"
 
     if ! { sudo dnf update -y && sudo dnf upgrade -y; }; then
         err_exit "apt-get update/upgrade failed, quitting"
     fi
 
-    dnfi software-properties-common apt-transport-https ca-certificates
-
-    slog "Installing essential ubuntu packages"
+    dnfi apt-transport-https ca-certificates
+    
+    slog "Installing essential fedora packages"
     dnfi curl wget git trash-cli tree fzf ripgrep
     dnfi tmux pkg-config urlview cascadia-fonts-all
-    dnfi zsh fasd zsh-syntax-highlighting zsh-autosuggestions fd-find
+    dnfi zsh zsh-syntax-highlighting zsh-autosuggestions fd-find
 
     dnfi unar unzip p7zip zoxide exa 
     dnfi ShellCheck git-extras zip gawk
 
+    slog "Setting up snapd"
+    dnfi snapd
+
+    [ -e /snap ] || sudo ln -s /var/lib/snapd/snap /snap
+    sudo snap install fasd --beta
 }
 
 dotfiles_install() {
