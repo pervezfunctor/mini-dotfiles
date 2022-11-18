@@ -69,10 +69,6 @@ ssource /usr/share/doc/fzf/examples/key-bindings.zsh
 dir_exists ~/.zsh/alias-tips || git clone --depth=1  https://github.com/djui/alias-tips.git ~/.zsh/alias-tips
 ssource ~/.zsh/alias-tips/alias-tips.plugin.zsh
 
-if ! has_cmd fasd; then
-    has_cmd apt-get && sudo apt-get install -y fasd
-fi
-
 has_cmd fasd && eval "$(fasd --init auto)"
 
 if dir_exists "$HOME/.local/share/pnpm"; then

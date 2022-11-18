@@ -1,0 +1,137 @@
+#! /usr/bin/env bash
+
+{
+
+DOT_DIR=~/.config/mini-seartipy
+
+# utils
+
+slog() {
+    echo "
+${BOLD}${GREEN}SEARTIPY: ${RESET} $1
+"
+}
+
+err_exit() {
+    echo "
+${BOLD}${RED}FATAL: ${RESET} $1
+"
+    exit 1
+}
+
+has_cmd() {
+    command -v "$1" > /dev/null
+}
+
+is_fedora() {
+    grep 'Fedora' /etc/redhat-release > /dev/null
+}
+
+sclone() {
+    local dest=${*: -1}
+    local src=${*: -2:1}
+
+    [ -d "$dest" ] && return 1
+
+    slog "Cloning $src to $dest"
+    git clone "$@"
+}
+
+smd() {
+    [ -d "$1" ] && return 1
+
+    slog "Creating directory $1"
+    mkdir -p "$1" 2> /dev/null
+}
+
+fln() {
+    if [ -e "$1" ]; then
+        rm -f "$2"
+    else
+        echo "$1 does not exist, cannot create link $2"
+        return 1
+    fi
+    slog "Creating link $2 to $1"
+    ln -s "$1" "$2"
+}
+
+# essential
+
+dnfi() {
+    for p in "$@"; do
+    slog "Installing package $p"
+        sudo dnf  -y install "$p"
+    done
+}
+
+essential_install() {
+    slog "Updating ubuntu"
+
+    if ! { sudo dnf update -y && sudo dnf upgrade -y; }; then
+        err_exit "apt-get update/upgrade failed, quitting"
+    fi
+
+    dnfi software-properties-common apt-transport-https ca-certificates
+
+    slog "Installing essential ubuntu packages"
+    dnfi curl wget git trash-cli tree fzf ripgrep
+    dnfi tmux pkg-config urlview cascadia-fonts-all
+    dnfi zsh fasd zsh-syntax-highlighting zsh-autosuggestions fd-find
+
+    dnfi unar unzip p7zip zoxide exa 
+    dnfi ShellCheck git-extras zip gawk
+
+}
+
+dotfiles_install() {
+    sclone https://github.com/pervezfunctor/mini-dotfiles.git "${DOT_DIR}"
+}
+
+# zsh
+
+zsh_install() {
+    slog "Installing zsh"
+
+    smd ~/.zsh
+    sclone --depth=1 https://github.com/sindresorhus/pure.git ~/.zsh/pure
+    sclone --depth=1 https://github.com/djui/alias-tips.git ~/.zsh/alias-tips
+
+    fln "${DOT_DIR}/zshrc" ~/.zshrc
+}
+
+installer() {
+    essential_install
+    dotfiles_install
+    zsh_install
+
+    echo "Set zsh as default"
+    sudo chsh -s $(which zsh) $(whoami)
+
+    sudo apt-get autoremove -y
+    slog "Installation done!"
+}
+
+keep_sudo_running() {
+    sudo -v
+    while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+}
+
+is_fedora || err_exit "This installer works only on Fedora. Quitting."
+
+curdir=$(pwd)
+
+rm -f ~/.seartipy-error.log ~/.seartipy-output.log 2> /dev/null
+
+slog "Installing..."
+
+keep_sudo_running
+
+smd ~/bin
+export PATH="$HOME/bin:$PATH"
+export DEBIAN_FRONTEND=noninteractive
+
+installer > >(tee ~/.seartipy-output.log) 2> >(tee ~/.seartipy-error.log >&2)
+
+cd "$curdir"
+
+}
