@@ -70,6 +70,7 @@ dir_exists ~/.zsh/alias-tips || git clone --depth=1  https://github.com/djui/ali
 ssource ~/.zsh/alias-tips/alias-tips.plugin.zsh
 
 has_cmd fasd && eval "$(fasd --init auto)"
+has_cmd zoxide && eval "$(zoxide init zsh)"
 
 if dir_exists "$HOME/.local/share/pnpm"; then
     # pnpm
