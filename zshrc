@@ -23,7 +23,7 @@ dir_exists() {
 }
 
 file_exists() {
-     [[ -f "$1" ]]
+    [[ -f "$1" ]]
 }
 
 has_cmd() {
@@ -124,3 +124,5 @@ alias lt='ll -tr'        # Lists sorted by date, most recent last.
 alias lc='lt -c'         # Lists sorted by date, most recent last, shows change time.
 alias lu='lt -u'         # Lists sorted by date, most recent last, shows access time.
 alias sl='ls'            # Correction for common spelling error.
+
+imwheel -b "4 5" > /dev/null 2>&1
