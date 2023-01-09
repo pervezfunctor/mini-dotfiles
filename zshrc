@@ -69,8 +69,11 @@ ssource /usr/share/doc/fzf/examples/key-bindings.zsh
 dir_exists ~/.zsh/alias-tips || git clone --depth=1  https://github.com/djui/alias-tips.git ~/.zsh/alias-tips
 ssource ~/.zsh/alias-tips/alias-tips.plugin.zsh
 
-has_cmd fasd && eval "$(fasd --init auto)"
-has_cmd zoxide && eval "$(zoxide init zsh)"
+if has_cmd fasd; then
+    eval "$(fasd --init auto)"
+elif has_cmd zoxide; then
+    eval "$(zoxide init zsh)"
+fi
 
 if dir_exists "$HOME/.local/share/pnpm"; then
     # pnpm
@@ -125,4 +128,4 @@ alias lc='lt -c'         # Lists sorted by date, most recent last, shows change 
 alias lu='lt -u'         # Lists sorted by date, most recent last, shows access time.
 alias sl='ls'            # Correction for common spelling error.
 
-imwheel -b "4 5" > /dev/null 2>&1
+# imwheel -b "4 5" > /dev/null 2>&1
