@@ -3,20 +3,20 @@
 {
 
 has_cmd() {
-    command -v "$1" > /dev/null
+  command -v "$1" > /dev/null
 }
 
 vscode_install() {
-    has_cmd code && return 0
+  has_cmd code && return 0
 
-    has_cmd snap || err_exit "snap not installed. Can't install vscode."
+  has_cmd snap || err_exit "snap not installed. Can't install vscode."
 
-    echo "Installing visual studio code"
-    sudo snap install --classic code
+  echo "Installing visual studio code"
+  sudo snap install --classic code
 }
 
 flathub_install() {
-    if has_cmd apt; then
+  if has_cmd apt; then
     sudo apt-get install -y flatpak gnome-software-plugin-flatpak
   fi
 
@@ -29,16 +29,14 @@ browsers_install() {
 
   flatpak install flathub com.microsoft.Edge
   flatpak install flathub com.google.Chrome
-
 }
 
 installer() {
-    vscode_install
-    browsers_install
+  vscode_install
+  browsers_install
 
-    echo "Installing npm packages"
-    has_cmd pnpm && pnpm install -g npm-check-updates degit tldr gtop
-
+  echo "Installing npm packages"
+  has_cmd pnpm && pnpm install -g npm-check-updates degit tldr gtop
 }
 
 export PATH="$HOME/bin:$PATH"
