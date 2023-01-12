@@ -25,18 +25,15 @@ flathub_install() {
 
 browsers_install() {
   has_cmd edge-browser && return 0
-  flathub_install()
+  flathub_install
 
-  flatpak install flathub com.microsoft.Edge
-  flatpak install flathub com.google.Chrome
+  flatpak install flathub com.microsoft.Edge -y
+  flatpak install flathub com.google.Chrome -y
 }
 
 installer() {
   vscode_install
   browsers_install
-
-  echo "Installing npm packages"
-  has_cmd pnpm && pnpm install -g npm-check-updates degit tldr gtop
 }
 
 export PATH="$HOME/bin:$PATH"
