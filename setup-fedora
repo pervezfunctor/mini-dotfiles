@@ -23,23 +23,8 @@ has_cmd() {
     command -v "$1" > /dev/null
 }
 
-is_debian() {
-    has_cmd lsb_release || return 1
-
-    local OS
-    OS=$(lsb_release -i | cut -d ':' -f2)
-    [[ "$OS" == *"Debian" ]]
-}
-
-is_ubuntu() {
-    has_cmd lsb_release || return 1
-    local OS
-    OS=$(lsb_release -i | cut -d ':' -f2)
-    [[ "$OS" == *"Ubuntu" ]]
-}
-
-is_apt() {
-    is_ubuntu || is_debian
+is_fedora() {
+    grep 'Fedora' /etc/redhat-release > /dev/null
 }
 
 sclone() {
@@ -72,32 +57,35 @@ fln() {
 
 # essential
 
-apti() {
+dnfi() {
     for p in "$@"; do
-        slog "Installing package $p"
-        is_debian && sudo apt-get -y install --no-install-recommends "$p"
-        is_ubuntu && sudo apt-get -y install "$p"
+    slog "Installing package $p"
+        sudo dnf  -y install "$p"
     done
 }
 
 essential_install() {
-    slog "Updating ubuntu"
+    slog "Updating fedora"
 
-    if ! { sudo apt-get update && sudo apt-get upgrade -y; }; then
+    if ! { sudo dnf update -y && sudo dnf upgrade -y; }; then
         err_exit "apt-get update/upgrade failed, quitting"
     fi
 
-    apti software-properties-common apt-transport-https ca-certificates
+    dnfi apt-transport-https ca-certificates
+    
+    slog "Installing essential fedora packages"
+    dnfi curl wget git trash-cli tree fzf ripgrep
+    dnfi tmux pkg-config urlview cascadia-fonts-all
+    dnfi zsh zsh-syntax-highlighting zsh-autosuggestions fd-find
 
-    slog "Installing essential ubuntu packages"
-    apti curl wget git trash-cli tree fzf ripgrep
-    apti tmux libzmq3-dev pkg-config urlview fonts-cascadia-code
-    apti zsh fasd zsh-syntax-highlighting zsh-autosuggestions fd-find
+    dnfi unar unzip p7zip zoxide exa 
+    dnfi ShellCheck git-extras zip gawk
 
-    if is_ubuntu; then
-        apti unar unzip p7zip build-essential zoxide exa python-is-python3
-        apti shellcheck git-extras zip gawk
-    fi
+    slog "Setting up snapd"
+    dnfi snapd
+
+    [ -e /snap ] || sudo ln -s /var/lib/snapd/snap /snap
+    sudo snap install fasd --beta
 }
 
 dotfiles_install() {
@@ -133,7 +121,7 @@ keep_sudo_running() {
     while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 }
 
-is_apt || err_exit "This installer works only on Ubuntu or Debian. Quitting."
+is_fedora || err_exit "This installer works only on Fedora. Quitting."
 
 curdir=$(pwd)
 
