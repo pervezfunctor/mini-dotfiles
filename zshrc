@@ -87,12 +87,15 @@ if dir_exists "$HOME/.local/share/pnpm"; then
 
     alias n='pnpm'
     alias ni='pnpm install'
+    alias nid='pnpm install -D'
+    alias nb='pnpm build'
+    alias nl='pnpm lint:dev'
     alias ne='pnpm exec'
     alias nd='pnpm dev'
-    alias nt='pnpm types'
     alias nc='pnpm ci'
-    alias ntt='pnpm test'
-    alias ntt='pnpm test'
+    alias nt='pnpm types:dev'
+    alias ntt='pnpm test:dev'
+    alias nci='pnpm types && pnpm lint'
 fi
 
 
