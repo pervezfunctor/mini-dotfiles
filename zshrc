@@ -132,3 +132,10 @@ alias lu='lt -u'         # Lists sorted by date, most recent last, shows access 
 alias sl='ls'            # Correction for common spelling error.
 
 # imwheel -b "4 5" > /dev/null 2>&1
+
+ssource "$HOME/.cargo/env"
+
+file_exists /home/linuxbrew/.linuxbrew/bin/brew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+export PATH=$PATH:/usr/local/go/bin
+export DOTNET_ROOT=$HOME/.dotnet
