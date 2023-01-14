@@ -96,7 +96,7 @@ essential_install() {
 
     if is_ubuntu; then
         apti unar unzip p7zip build-essential zoxide exa python-is-python3
-        apti shellcheck git-extras zip gawk
+        apti shellcheck git-extras zip gawk gcc
     fi
 }
 
