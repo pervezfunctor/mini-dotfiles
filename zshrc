@@ -94,8 +94,16 @@ if dir_exists "$HOME/.local/share/pnpm"; then
     alias nd='pnpm dev'
     alias nc='pnpm ci'
     alias nt='pnpm types:dev'
+    alias ntc='pnpm types'
     alias ntt='pnpm test:dev'
+    alias nttc='pnpm test:dev'
     alias nci='pnpm types && pnpm lint'
+    alias ndb='pnpm db'
+    alias ndbt='pnpm db:types'
+    alias ndbp='pnpm db:push'
+    alias ndbs='pnpm db:seed'
+    alias ndbst='pnpm db:studio'
+    alias ndbr='pnpm db:repl'
 fi
 
 
@@ -132,7 +140,7 @@ alias lu='lt -u'         # Lists sorted by date, most recent last, shows access 
 alias sl='ls'            # Correction for common spelling error.
 
 alias si='sudo nala install'
-alias su='sudo nala update && sudo nala upgrade -y'
+alias sup='sudo nala update && sudo nala upgrade -y'
 alias ss='nala search'
 
 # imwheel -b "4 5" > /dev/null 2>&1
