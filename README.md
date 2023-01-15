@@ -24,6 +24,12 @@ If you want nodejs installation, along with pnpm, you can run the following comm
   bash ~/.config/mini-seartipy/pnpm-setup
 ```
 
+For installing visual studio code, chrome and edge browsers, run the following command.
+
+```bash
+  bash ~/.config/mini-seartipy/ui-setup
+```
+
 Above command installs latest nodejs version. If you want a different version, you could use [pnpm's env](https://pnpm.io/cli/env) command.
 
 This repository can also be used as [dotfiles for a devcontainer](https://code.visualstudio.com/docs/remote/containers#_personalizing-with-dotfile-repositories).
