@@ -131,6 +131,10 @@ alias lc='lt -c'         # Lists sorted by date, most recent last, shows change 
 alias lu='lt -u'         # Lists sorted by date, most recent last, shows access time.
 alias sl='ls'            # Correction for common spelling error.
 
+alias si = sudo nala install
+alias su = sudo nala update && sudo nala upgrade -y
+alias ss = nala search
+
 # imwheel -b "4 5" > /dev/null 2>&1
 
 ssource "$HOME/.cargo/env"
