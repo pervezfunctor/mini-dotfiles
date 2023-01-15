@@ -143,3 +143,6 @@ file_exists /home/linuxbrew/.linuxbrew/bin/brew && eval "$(/home/linuxbrew/.linu
 
 export PATH=$PATH:/usr/local/go/bin
 export DOTNET_ROOT=$HOME/.dotnet
+
+# export DOCKER_HOST=unix:///run/user/1000/docker.sock
+export PATH=/usr/bin:$PATH

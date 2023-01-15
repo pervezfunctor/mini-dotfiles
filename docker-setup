@@ -4,7 +4,11 @@
 
 docker_install() {
     curl -fsSL https://get.docker.com | sh -s -- -y
+    sudo apt-get install -y uidmap
+    dockerd-rootless-setuptool.sh install
+    sudo loginctl enable-linger pervez
 }
+
 
 installer() {
     docker_install
