@@ -31,6 +31,10 @@ is_debian() {
     [[ "$OS" == *"Debian" ]]
 }
 
+is_wsl() {
+    grep -qi microsoft /proc/version
+}
+
 is_ubuntu() {
     has_cmd lsb_release || return 1
     local OS
