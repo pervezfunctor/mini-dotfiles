@@ -22,8 +22,9 @@ pnpm_install() {
 installer() {
     pnpm_install
 
-    echo "Installing npm packages"
-    pnpm install -g npm-check-updates degit tldr gtop
+    echo "Installing npm packages globally"
+    pnpm install -g npm-check-updates degit tldr gtop ndb @antfu/ni
+    pnpm install -g tsx vite-node zx turbo
 
     if ! grep "fs.inotify.max_user_watches" /etc/sysctl.conf > /dev/null; then
         echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf > /dev/null && sudo sysctl -p
