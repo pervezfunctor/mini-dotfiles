@@ -108,6 +108,7 @@ fi
 
 
 alias g='git'
+alias gs="git stash -u"
 alias gst="git status"
 alias gsu="git status -u"
 alias gcan="git commit --amend --no-edit"
@@ -143,17 +144,24 @@ alias si='sudo nala install'
 alias sup='sudo nala update && sudo nala upgrade -y'
 alias ss='nala search'
 
+alias -g ..="../"
+alias -g ...="../../"
+alias -g ....="../../../"
+alias -g .....="../../../../"
+alias -g ......="../../../../../"
+
 # imwheel -b "4 5" > /dev/null 2>&1
 
 ssource "$HOME/.cargo/env"
 
-file_exists /home/linuxbrew/.linuxbrew/bin/brew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
 
 export PATH=$PATH:/usr/local/go/bin
 export DOTNET_ROOT=$HOME/.dotnet
 
 # export DOCKER_HOST=unix:///run/user/1000/docker.sock
 export PATH=/usr/bin:$PATH
+
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
