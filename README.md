@@ -1,35 +1,34 @@
 # Installation
 
-If you are only interested in `zsh` configuration, just link or copy zshrc from this repo to ~/.zshrc.
-For example
+For installing essential software for development run the following
 
 ```bash
-  git clone https://github.com/pervezfunctor/mini-dotfiles.git ~/.config/mini-seartipy
-  rm -f ~/.zshrc
-  ln -s ~/.config/mini-seartipy/zshrc ~/.zshrc
-```
-
-If you want to install essential software for development and have a nice zsh configuration, please do the following.
-Note that your current zshrc configuration(`~/.zshrc`) will be deleted.
-
-```bash
-  git clone https://github.com/pervezfunctor/mini-dotfiles.git ~/.config/mini-seartipy
+  git clone --depth=1 https://github.com/pervezfunctor/mini-dotfiles.git ~/.config/mini-seartipy
   bash ~/.config/mini-seartipy/setup
 ```
 
-If you want nodejs installation, along with pnpm, you can run the following commands.
+For nodejs installation, along with pnpm, you can run the following commands.
 
 ```bash
-  git clone https://github.com/pervezfunctor/mini-dotfiles.git ~/.config/mini-seartipy
   bash ~/.config/mini-seartipy/pnpm-setup
 ```
 
-For installing visual studio code, chrome and edge browsers, run the following command.
+For installing visual studio code, chrome and edge browsers, run the following
+command.
 
 ```bash
   bash ~/.config/mini-seartipy/ui-setup
 ```
 
-Above command installs latest nodejs version. If you want a different version, you could use [pnpm's env](https://pnpm.io/cli/env) command.
+If you are interested only in `zsh` configuration, link or copy zshrc from this
+repo to ~/.zshrc. No need to run any scripts. For example
 
-This repository can also be used as [dotfiles for a devcontainer](https://code.visualstudio.com/docs/remote/containers#_personalizing-with-dotfile-repositories).
+```bash
+  git clone https://github.com/pervezfunctor/mini-dotfiles.git ~/mini-seartipy
+  mv ~/.zshrc ~/.zshrc.bak
+  cp ~/mini-seartipy/zshrc ~/.zshrc
+  rm -rf ~/mini-seartipy
+```
+
+**Note: This repository can also be used
+[for devcontainer](https://code.visualstudio.com/docs/remote/containers#_personalizing-with-dotfile-repositories).**
