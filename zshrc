@@ -144,6 +144,9 @@ alias si='sudo nala install'
 alias sup='sudo nala update && sudo nala upgrade -y'
 alias ss='nala search'
 
+alias md="mkdir -p"
+alias rd="rmdir"
+
 alias -g ..="../"
 alias -g ...="../../"
 alias -g ....="../../../"
