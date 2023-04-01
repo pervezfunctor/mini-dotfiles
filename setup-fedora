@@ -72,13 +72,13 @@ essential_install() {
     fi
 
     dnfi apt-transport-https ca-certificates
-    
+
     slog "Installing essential fedora packages"
     dnfi curl wget git trash-cli tree fzf ripgrep
     dnfi tmux pkg-config urlview cascadia-fonts-all
     dnfi zsh zsh-syntax-highlighting zsh-autosuggestions fd-find
 
-    dnfi unar unzip p7zip zoxide exa 
+    dnfi unar unzip p7zip zoxide exa gh
     dnfi ShellCheck git-extras zip gawk
 
     slog "Setting up snapd"

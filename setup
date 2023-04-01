@@ -94,13 +94,13 @@ essential_install() {
     apti software-properties-common apt-transport-https ca-certificates
 
     slog "Installing essential ubuntu packages"
-    apti curl wget git trash-cli tree fzf ripgrep nala gh
+    apti curl wget git trash-cli tree fzf ripgrep nala
     apti tmux libzmq3-dev pkg-config urlview fonts-cascadia-code
     apti zsh fasd zsh-syntax-highlighting zsh-autosuggestions fd-find
 
     if is_ubuntu; then
         apti unar unzip p7zip build-essential zoxide exa python-is-python3
-        apti shellcheck git-extras zip gawk gcc
+        apti shellcheck git-extras zip gawk gcc gh
     fi
 }
 
