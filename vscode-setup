@@ -1,0 +1,34 @@
+#! /usr/bin/env bash
+
+{
+
+has_cmd() {
+  command -v "$1" > /dev/null
+}
+
+vscode_install() {
+  has_cmd code && return 0
+
+  has_cmd snap || err_exit "snap not installed. Can't install vscode."
+
+  echo "Installing visual studio code"
+  sudo snap install --classic code
+}
+
+installer() {
+  vscode_install
+}
+
+export PATH="$HOME/bin:$PATH"
+
+export PNPM_HOME="$HOME/.local/share/pnpm"
+export PATH="$PNPM_HOME:$PATH"
+
+curdir=$(pwd)
+
+rm -f ~/.seartipy-error.log ~/.seartipy-output.log 2> /dev/null
+installer > >(tee ~/.seartipy-output.log) 2> >(tee ~/.seartipy-error.log >&2)
+
+cd "$curdir"
+
+}
