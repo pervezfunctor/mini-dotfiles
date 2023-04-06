@@ -23,10 +23,8 @@ installer() {
 }
 
 echo "Installing miniconda..."
-
 rm -f ~/.seartipy-error.log ~/.seartipy-output.log 2> /dev/null
 installer > >(tee ~/.seartipy-output.log) 2> >(tee ~/.seartipy-error.log >&2)
-
 echo "Installing miniconda done."
 
 }

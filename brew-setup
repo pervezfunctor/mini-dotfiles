@@ -3,9 +3,13 @@
 {
 
 installer() {
+    has_cmd brew && return 0
     echo | /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 }
 
+export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+
+echo "Installing Homebrew..."
 rm -f ~/.seartipy-error.log ~/.seartipy-output.log 2> /dev/null
 installer > >(tee ~/.seartipy-output.log) 2> >(tee ~/.seartipy-error.log >&2)
 

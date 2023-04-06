@@ -17,6 +17,9 @@ installer() {
     dotnet_install
 }
 
+export DOTNET_ROOT=$HOME/.dotnet
+
+echo "Installing .NET 7.0..."
 rm -f ~/.seartipy-error.log ~/.seartipy-output.log 2> /dev/null
 installer > >(tee ~/.seartipy-output.log) 2> >(tee ~/.seartipy-error.log >&2)
 

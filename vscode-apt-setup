@@ -1,0 +1,37 @@
+#! /usr/bin/env bash
+
+{
+
+
+has_cmd() {
+    command -v "$1" > /dev/null
+}
+
+vscode_install() {
+  has_cmd code && return 0
+
+  # Check if Visual Studio Code is already installed
+  if ! command -v code &> /dev/null
+  then
+      # Import the Microsoft GPG key
+      wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | sudo apt-key add -
+
+      # Add the Visual Studio Code repository to the APT sources list
+      sudo add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
+
+      # Update the package list
+      sudo apt-get update
+  fi
+
+  # Install Visual Studio Code
+  sudo apt-get install code
+}
+
+installer() {
+    vscode_install
+}
+
+echo "Installing Visual Studio Code..."
+rm -f ~/.seartipy-error.log ~/.seartipy-output.log 2> /dev/null
+installer > >(tee ~/.seartipy-output.log) 2> >(tee ~/.seartipy-error.log >&2)
+}

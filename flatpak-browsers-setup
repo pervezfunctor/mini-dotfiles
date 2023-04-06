@@ -23,7 +23,6 @@ browsers_install() {
 }
 
 installer() {
-
   browsers_install
 }
 
@@ -32,11 +31,7 @@ export PATH="$HOME/bin:$PATH"
 export PNPM_HOME="$HOME/.local/share/pnpm"
 export PATH="$PNPM_HOME:$PATH"
 
-curdir=$(pwd)
-
+echo "Installing chrome and edge browsers via flatpak..."
 rm -f ~/.seartipy-error.log ~/.seartipy-output.log 2> /dev/null
 installer > >(tee ~/.seartipy-output.log) 2> >(tee ~/.seartipy-error.log >&2)
-
-cd "$curdir"
-
 }
