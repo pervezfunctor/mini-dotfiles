@@ -2,9 +2,14 @@
 
 {
 
+
+has_cmd() {
+    command -v "$1" > /dev/null
+}
+
 installer() {
     has_cmd brew && return 0
-    echo | /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 }
 
 export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
