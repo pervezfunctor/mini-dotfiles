@@ -2,6 +2,10 @@
 
 {
 
+has_cmd() {
+    command -v "$1" > /dev/null
+}
+
 docker_setup() {
   has_cmd docker && return 0
 
