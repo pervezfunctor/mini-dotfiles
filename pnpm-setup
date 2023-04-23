@@ -10,7 +10,14 @@ pnpm_install() {
     has_cmd pnpm && return 0
 
     echo "Installing pnpm"
-    curl -fsSL https://get.pnpm.io/install.sh | sh -
+    if has_cmd curl; then
+        curl -fsSL https://get.pnpm.io/install.sh | sh -
+    elif has_cmd wget; then
+        wget -qO- https://get.pnpm.io/install.sh | sh -
+    else
+        echo "curl  or wget must be installed"
+        return 1
+    fi
 
     echo "Installing node"
     pnpm env use --global latest
