@@ -75,6 +75,10 @@ elif has_cmd zoxide; then
     eval "$(zoxide init zsh)"
 fi
 
+alias cpr="cp -r"
+alias md="mkdir -p"
+alias rd="rmdir"
+
 if dir_exists "$HOME/.local/share/pnpm"; then
     # pnpm
     export PNPM_HOME="$HOME/.local/share/pnpm"
