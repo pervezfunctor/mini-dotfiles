@@ -184,3 +184,5 @@ else
 fi
 unset __conda_setup
 # <<< conda initialize <<<
+
+alias clone='gh repo clone'
