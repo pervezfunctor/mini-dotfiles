@@ -7,7 +7,7 @@ has_cmd() {
 }
 
 pnpm_install() {
-    has_cmd pnpm && return 0
+    # has_cmd pnpm && return 0
 
     echo "Installing pnpm"
     if has_cmd curl; then
