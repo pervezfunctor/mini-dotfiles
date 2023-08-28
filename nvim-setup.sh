@@ -12,7 +12,7 @@ neovim_install() {
   has_cmd pnpm || return -1
   has_cmd cargo || return -1
 
-  has_cmd pip || sudo apt-get install -y python3-pip
+  has_cmd pip || sudo apt-get install -y python3-pip python3-venv
   has_cmd go || brew install golang
 
   sudo update-locale LANG=en_US.UTF8
@@ -38,6 +38,7 @@ astronvim_install() {
 
 installer() {
     neovim_install
+    astronvim_install
 }
 
 echo "Installing neovim..."
