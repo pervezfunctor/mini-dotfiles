@@ -10,18 +10,30 @@ has_cmd() {
 neovim_install() {
   has_cmd brew || return -1
   has_cmd pnpm || return -1
-  has_cmd pip || return -1
   has_cmd cargo || return -1
 
+  has_cmd pip || sudo apt-get install -y python3-pip
   has_cmd go || brew install golang
 
   sudo update-locale LANG=en_US.UTF8
   brew install neovim lazygit bottom
-  sudo apt-get install -y  python3 python-pip luarocks xclip xsel
+  sudo apt-get install -y luarocks xclip xsel
 
   pnpm install -g neovim
   pip install --user neovim
-  cargo install treesitter-cli
+  cargo install tree-sitter-cli
+}
+
+astronvim_install() {
+  trash ~/.config/nvim
+
+  trash ~/.local/share/nvim ~/.local/share/nvim.bak
+  trash ~/.local/state/nvim ~/.local/state/nvim.bak
+  trash ~/.cache/nvim ~/.cache/nvim.bak
+
+  git clone --depth 1 https://github.com/AstroNvim/AstroNvim ~/.config/nvim
+
+  git clone https://github.com/pervezfunctor/astronvim-config.git  ~/.config/nvim/lua/user
 }
 
 installer() {
@@ -33,3 +45,4 @@ rm -f ~/.seartipy-error.log ~/.seartipy-output.log 2> /dev/null
 installer > >(tee ~/.seartipy-output.log) 2> >(tee ~/.seartipy-error.log >&2)
 echo "Installing neovim done."
 }
+

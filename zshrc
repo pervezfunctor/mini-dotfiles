@@ -163,12 +163,12 @@ ssource "$HOME/.cargo/env"
 
 export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
 
-export PATH=$PATH:/usr/local/go/bin
-export DOTNET_ROOT=$HOME/.dotnet
+export PATH="$PATH:/usr/local/go/bin"
+export DOTNET_ROOT="$HOME/.dotnet"
 
 # export DOCKER_HOST=unix:///run/user/1000/docker.sock
-export PATH=/usr/bin:$PATH
-
+export PATH="/usr/bin:$PATH"
+export PATH="/snap/bin:$PATH"
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!

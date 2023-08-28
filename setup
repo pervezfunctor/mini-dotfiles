@@ -100,7 +100,8 @@ essential_install() {
     apti zsh fasd zsh-syntax-highlighting zsh-autosuggestions fd-find
 
     if is_ubuntu; then
-        apti unar unzip p7zip build-essential zoxide exa python-is-python3
+        apti unar unzip p7zip build-essential zoxide exa
+        apti python3 python3-pip python-is-python3
         apti shellcheck git-extras zip gawk gcc gh
     fi
 }
