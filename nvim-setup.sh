@@ -17,10 +17,10 @@ neovim_install() {
 
   sudo update-locale LANG=en_US.UTF8
   brew install neovim lazygit bottom
-  sudo apt-get install -y luarocks xclip xsel
+  sudo apt-get install -y luarocks gdu
 
   pnpm install -g neovim
-  pip install --user neovim
+  pip install neovim
   cargo install tree-sitter-cli
 }
 
