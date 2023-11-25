@@ -95,7 +95,7 @@ essential_install() {
 
     slog "Installing essential ubuntu packages"
     apti curl wget git trash-cli tree fzf ripgrep nala
-    apti tmux libzmq3-dev pkg-config urlview emacs-nox
+    apti tmux libzmq3-dev pkg-config urlview
     apti fonts-cascadia-code fonts-jetbrains-mono
     apti zsh fasd zsh-syntax-highlighting zsh-autosuggestions fd-find
 
