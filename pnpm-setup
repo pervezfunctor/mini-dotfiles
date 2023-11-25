@@ -24,6 +24,9 @@ pnpm_install() {
 
     pnpm install-completion bash
     pnpm install-completion zsh
+
+    pnpm dlx playwright install-deps
+    pnpm dlx playwright install
 }
 
 installer() {
