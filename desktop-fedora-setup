@@ -90,6 +90,41 @@ dotfiles_install() {
     sclone https://github.com/pervezfunctor/mini-dotfiles.git "${DOT_DIR}"
 }
 
+docker_install() {
+    has_cmd docker && return 1
+
+    slog "Installing docker"
+    dnfi dnf-plugins-core
+    sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+    dnfi docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+    sudo systemctl start docker
+
+    slog "Setting up docker user group"
+    sudo groupadd docker
+    sudo usermod -aG docker $USER
+
+    slog "Setting up docker service"
+    sudo systemctl enable docker.service
+    sudo systemctl enable containerd.service
+}
+
+lxd_install() {
+    has_cmd lxd && return 1
+    slog "Installing lxd"
+
+    sudo snap install lxd
+
+    slog "Setting up lxd service"
+    sudo snap enable lxd
+    sudo snap services lxd
+
+    slog "Setting up lxd user group"
+    sudo usermod -a -G lxd $USER
+    id $USER
+
+    slog "lxd installation done! Start using it right now with `newgrp lxd`, followed by `lxd init`"
+}
+
 flathub_install() {
     has_cmd flatpak || return 1
     flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo --user
@@ -113,7 +148,9 @@ apps_install() {
 monaspace_install() {
     wget https://github.com/githubnext/monaspace/releases/download/v1.000/monaspace-v1.000.zip
     unzip -d monaspace monaspace-v1.000.zip
+    # TODO: Use smd
     mkdir ~/.local/share/fonts
+    # TODO: Don't copy if already exists
     cp ./monaspace/monaspace-v1.000/fonts/otf/* ~/.local/share/fonts
     cp ./monaspace/monaspace-v1.000/fonts/variable/* ~/.local/share/fonts
     trash monaspace monaspace-v1.000.zip
