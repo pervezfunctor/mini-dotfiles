@@ -68,10 +68,8 @@ essential_install() {
     slog "Updating fedora"
 
     if ! { sudo dnf update -y && sudo dnf upgrade -y; }; then
-        err_exit "apt-get update/upgrade failed, quitting"
+        err_exit "dnf update/upgrade failed, quitting"
     fi
-
-    dnfi apt-transport-https ca-certificates
 
     slog "Installing essential fedora packages"
     dnfi curl wget git trash-cli tree fzf ripgrep
@@ -112,7 +110,6 @@ installer() {
     echo "Set zsh as default"
     sudo chsh -s $(which zsh) $(whoami)
 
-    sudo apt-get autoremove -y
     slog "Installation done!"
 }
 
