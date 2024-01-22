@@ -186,3 +186,7 @@ unset __conda_setup
 # <<< conda initialize <<<
 
 alias clone='gh repo clone'
+
+if has_cmd github-copilot-cli; then
+    eval "$(github-copilot-cli alias -- "$0")"
+fi
