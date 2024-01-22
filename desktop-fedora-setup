@@ -6,6 +6,13 @@ DOT_DIR=~/.config/mini-seartipy
 
 # utils
 
+smd() {
+    [ -d "$1" ] && return 1
+
+    slog "Creating directory $1"
+    mkdir -p "$1" 2> /dev/null
+}
+
 slog() {
     echo "
 ${BOLD}${GREEN}SEARTIPY: ${RESET} $1
@@ -76,7 +83,7 @@ essential_install() {
     dnfi tmux pkg-config urlview cascadia-fonts-all jetbrains-mono-fonts-all micro
     dnfi zsh zsh-syntax-highlighting zsh-autosuggestions fd-find
 
-    dnfi unar unzip p7zip zoxide exa gh
+    dnfi unar unzip p7zip zoxide gh
     dnfi ShellCheck git-extras zip gawk
 
     slog "Setting up snapd"
@@ -109,7 +116,7 @@ docker_install() {
 }
 
 sys_install() {
-    sudo dnf groupinstall -y --with-optional virtualization
+    sudo dnf groupinstall -y --with-optional "virtualization"
     sudo systemctl start libvirtd
     sudo systemctl enable libvirtd
 
@@ -129,11 +136,11 @@ lxd_install() {
     slog "Setting up lxd user group"
     sudo usermod -a -G lxd $USER
     id $USER
-
+flk
     slog "lxd installation done! Start using it right now with `newgrp lxd`, followed by `lxd init`"
 }
 
-code_instaall() {
+code_install() {
     has_cmd code && return 1
 
     sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
@@ -166,8 +173,7 @@ apps_install() {
 monaspace_install() {
     wget https://github.com/githubnext/monaspace/releases/download/v1.000/monaspace-v1.000.zip
     unzip -d monaspace monaspace-v1.000.zip
-    # TODO: Use smd
-    mkdir ~/.local/share/fonts
+    smd ~/.local/share/fonts
     # TODO: Don't copy if already exists
     cp ./monaspace/monaspace-v1.000/fonts/otf/* ~/.local/share/fonts
     cp ./monaspace/monaspace-v1.000/fonts/variable/* ~/.local/share/fonts
