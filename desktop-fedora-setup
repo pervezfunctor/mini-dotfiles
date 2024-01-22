@@ -108,6 +108,14 @@ docker_install() {
     sudo systemctl enable containerd.service
 }
 
+sys_install() {
+    sudo dnf groupinstall -y --with-optional virtualization
+    sudo systemctl start libvirtd
+    sudo systemctl enable libvirtd
+
+    sudo dnf groupinstall -y --with-optional "System Tools"
+}
+
 lxd_install() {
     has_cmd lxd && return 1
     slog "Installing lxd"
@@ -125,19 +133,29 @@ lxd_install() {
     slog "lxd installation done! Start using it right now with `newgrp lxd`, followed by `lxd init`"
 }
 
+code_instaall() {
+    has_cmd code && return 1
+
+    sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
+    sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
+    dnf check-update
+    sudo dnf install code code-insiders
+}
+
 flathub_install() {
     has_cmd flatpak || return 1
     flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo --user
 }
 
 cpp_install() {
-    sudo dnf groupinstall "Development Tools" -y
+    sudo dnf groupinstall -y "Development Tools"
+    sudo dnf groupinstall -y "C Development Tools and Libraries"
     dnfi cmake gcc-c++ clang llvm boost clang-tools-extra pre-commit
 }
 
 apps_install() {
     dnfi virt-manager chromium neovim emacs
-    flatpak install -y --user flathub com.visualstudio.code
+    # flatpak install -y --user flathub com.visualstudio.code
     flatpak install -y --user flathub org.telegram.desktop
     flatpak install -y --user flathub com.jetbrains.CLion
     flatpak install -y --user flathub com.google.Chrome
@@ -177,6 +195,8 @@ installer() {
     lxd_install
     cpp_install
     monaspace_install
+    code_install
+    sys_install
     apps_install
 
     echo "Set zsh as default"
