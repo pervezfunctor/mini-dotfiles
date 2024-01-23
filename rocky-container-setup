@@ -41,7 +41,7 @@ smd() {
     [ -d "$1" ] && return 1
 
     slog "Creating directory $1"
-    mkdir -p "$1" 2> /dev/null
+    smd "$1" 2> /dev/null
 }
 
 fln() {
@@ -64,26 +64,26 @@ dnfi() {
     done
 }
 
-ssh_install() {
-    slog "Installing ssh"
+# ssh_install() {
+#     slog "Installing ssh"
 
-    sudo dnf install openssh-server -y
+#     sudo dnf install openssh-server -y
 
-    slog "Starting sshd"
-    sudo systemctl start sshd
-    sudo systemctl enable sshd
+#     slog "Starting sshd"
+#     sudo systemctl start sshd
+#     sudo systemctl enable sshd
 
-    slog "Setting up firewall"
-    sudo dnf install firewalld -y
-    sudo systemctl start firewalld
-    sudo systemctl enable firewalld
+#     slog "Setting up firewall"
+#     sudo dnf install firewalld -y
+#     sudo systemctl start firewalld
+#     sudo systemctl enable firewalld
 
-    sudo firewall-cmd --permanent --add-service=ssh
-    sudo firewall-cmd --reload
+#     sudo firewall-cmd --permanent --add-service=ssh
+#     sudo firewall-cmd --reload
 
-    # allow root to ssh
+#     # allow root to ssh
 
-}
+# }
 
 essential_install() {
     slog "Updating fedora"
@@ -93,13 +93,17 @@ essential_install() {
     fi
 
     slog "Installing essential fedora packages"
+
+    dnfi install epel-release
     dnfi curl wget git trash-cli tree fzf ripgrep
     dnfi tmux pkg-config urlview micro
     dnfi zsh zsh-syntax-highlighting zsh-autosuggestions fd-find
+    dnfi neovim
 
-    dnfi unar unzip p7zip zoxide exa gh
+    dnfi unar unzip p7zip zoxide gh
     dnfi ShellCheck git-extras zip gawk
 
+    has_cmd gh && gh extension install github/gh-copilot
     slog "Setting up snapd"
     dnfi snapd
 
@@ -111,8 +115,19 @@ dotfiles_install() {
     sclone https://github.com/pervezfunctor/mini-dotfiles.git "${DOT_DIR}"
 }
 
+micro_install() {
+    has_cmd micro && return 1
+
+    slog "Installing micro"
+
+    dnfi install curl tar -y
+    curl https://getmic.ro | bash
+    sudo mv micro /usr/bin/
+}
+
 cpp_install() {
-    sudo dnf groupinstall "Development Tools" -y # make this smaller
+    sudo dnf groupinstall "Development Tools" -y
+    sudo dnf groupinstall -y "C Development Tools and Libraries"
     dnfi cmake gcc-c++ clang llvm boost clang-tools-extra pre-commit
 }
 
@@ -131,13 +146,14 @@ zsh_install() {
 installer() {
     essential_install
     dotfiles_install
+    micro_install
     zsh_install
     cpp_install
 
     echo "Set zsh as default"
     sudo chsh -s $(which zsh) $(whoami)
 
-    slog "Installation done!"
+    slog "Installation done! Look at ~/.seartipy-error.log for any errors."
 }
 
 keep_sudo_running() {

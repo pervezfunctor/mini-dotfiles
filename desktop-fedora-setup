@@ -6,13 +6,6 @@ DOT_DIR=~/.config/mini-seartipy
 
 # utils
 
-smd() {
-    [ -d "$1" ] && return 1
-
-    slog "Creating directory $1"
-    mkdir -p "$1" 2> /dev/null
-}
-
 slog() {
     echo "
 ${BOLD}${GREEN}SEARTIPY: ${RESET} $1
@@ -97,6 +90,12 @@ dotfiles_install() {
     sclone https://github.com/pervezfunctor/mini-dotfiles.git "${DOT_DIR}"
 }
 
+cockpit_install() {
+    dnfi install cockpit
+    sudo systemctl enable --now cockpit.socket
+    sudo firewall-cmd --add-service=cockpit
+    sudo firewall-cmd --add-service=cockpit --permanent
+}
 docker_install() {
     has_cmd docker && return 1
 
@@ -116,6 +115,7 @@ docker_install() {
 }
 
 sys_install() {
+    sudo dnf ininstall -y toolbox buildah distrobox
     sudo dnf groupinstall -y --with-optional "virtualization"
     sudo systemctl start libvirtd
     sudo systemctl enable libvirtd
