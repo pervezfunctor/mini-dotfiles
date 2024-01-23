@@ -65,13 +65,13 @@ dnfi() {
 }
 
 essential_install() {
-    slog "Updating fedora"
+    slog "Updating Rocky Linux"
 
     if ! { sudo dnf update -y && sudo dnf upgrade -y; }; then
         err_exit "dnf update/upgrade failed, quitting"
     fi
 
-    slog "Installing essential fedora packages"
+    slog "Installing essential rocky linux packages"
 
     dnfi epel-release
 
@@ -199,7 +199,7 @@ keep_sudo_running() {
     while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 }
 
-is_fedora || err_exit "This installer works only on Fedora. Quitting."
+is_fedora || err_exit "This installer works only on Rocky Linux. Quitting."
 
 curdir=$(pwd)
 
