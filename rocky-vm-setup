@@ -74,20 +74,20 @@ essential_install() {
     slog "Installing essential fedora packages"
 
     dnfi install epel-release
-    dnfi curl wget git trash-cli tree fzf ripgrep
-    dnfi tmux pkg-config urlview micro
-    dnfi zsh zsh-syntax-highlighting zsh-autosuggestions fd-find
-    dnfi neovim
 
-    dnfi unar unzip p7zip zoxide gh
-    dnfi ShellCheck git-extras zip gawk
+    dnfi curl wget git trash-cli tree fzf ripgrep tmux pkg-config urlview
+    dnfi neovim zsh zsh-syntax-highlighting zsh-autosuggestions fd-find
+    dnfi unar unzip p7zip zoxide gh ShellCheck git-extras zip gawk
 
     has_cmd gh && gh extension install github/gh-copilot
+
     slog "Setting up snapd"
     dnfi snapd
 
     [ -e /snap ] || sudo ln -s /var/lib/snapd/snap /snap
     sudo snap install fasd --beta
+
+    slog "snapd setup done!"
 }
 
 dotfiles_install() {
@@ -102,13 +102,22 @@ micro_install() {
     dnfi install curl tar -y
     curl https://getmic.ro | bash
     sudo mv micro /usr/bin/
+
+    slog "micro installation done!"
 }
 
+cockpit_install() {
+    dnfi install cockpit
+    sudo systemctl enable --now cockpit.socket
+    sudo firewall-cmd --add-service=cockpit
+    sudo firewall-cmd --add-service=cockpit --permanent
+}
 
 docker_install() {
     has_cmd docker && return 1
 
     slog "Installing docker"
+
     dnfi dnf-plugins-core
     sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
     dnfi docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
@@ -121,24 +130,42 @@ docker_install() {
     slog "Setting up docker service"
     sudo systemctl enable docker.service
     sudo systemctl enable containerd.service
+
+    slog "docker installation done!"
 }
 
 astronvim_install() {
-  trash ~/.config/nvim
+    slog "Installing AstroNvim"
+    trash ~/.config/nvim
+    trash ~/.local/share/nvim ~/.local/share/nvim.bak
+    trash ~/.local/state/nvim ~/.local/state/nvim.bak
+    trash ~/.cache/nvim ~/.cache/nvim.bak
 
-  trash ~/.local/share/nvim ~/.local/share/nvim.bak
-  trash ~/.local/state/nvim ~/.local/state/nvim.bak
-  trash ~/.cache/nvim ~/.cache/nvim.bak
+    git clone --depth 1 https://github.com/AstroNvim/AstroNvim ~/.config/nvim
 
-  git clone --depth 1 https://github.com/AstroNvim/AstroNvim ~/.config/nvim
+    slog "AstroNvim installation done!"
 }
 
 cpp_install() {
+    slog "Installing C++ tools"
+
     sudo dnf groupinstall "Development Tools" -y
-    sudo dnf groupinstall -y "C Development Tools and Libraries"
     dnfi cmake gcc-c++ clang llvm boost clang-tools-extra pre-commit
+
+    slog "C++ tools installation done!"
 }
 
+code_server_install() {
+    has_cmd code-server && return 1
+
+    slog "Installing code-server"
+    curl -fsSL https://code-server.dev/install.sh | sh
+    slog "code-server installation done!"
+
+    # slog "Installing coder"
+    # curl -L https://coder.com/install.sh | sh
+    # slog "coder installation done!"
+}
 # zsh
 
 zsh_install() {
@@ -149,6 +176,8 @@ zsh_install() {
     sclone --depth=1 https://github.com/djui/alias-tips.git ~/.zsh/alias-tips
 
     fln "${DOT_DIR}/zshrc" ~/.zshrc
+
+    slog "zsh installation done!"
 }
 
 installer() {
@@ -158,6 +187,8 @@ installer() {
     zsh_install
     cpp_install
     astronvim_install
+    code_server_install
+    docker_install
 
     echo "Set zsh as default"
     sudo chsh -s $(which zsh) $(whoami)

@@ -96,6 +96,7 @@ cockpit_install() {
     sudo firewall-cmd --add-service=cockpit
     sudo firewall-cmd --add-service=cockpit --permanent
 }
+
 docker_install() {
     has_cmd docker && return 1
 
