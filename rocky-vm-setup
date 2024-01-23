@@ -55,6 +55,19 @@ fln() {
     ln -s "$1" "$2"
 }
 
+srm() {
+    if [ -e "$1" ]; then
+        trash "$1"
+    fi
+}
+
+fmv() {
+    if [ -e "$1" ]; then
+        trash "$2"
+    fi
+    mv "$1" "$2"
+}
+
 # essential
 
 dnfi() {
@@ -73,11 +86,14 @@ essential_install() {
 
     slog "Installing essential rocky linux packages"
 
+    sudo dnf config-manager --set-enabled crb
     dnfi epel-release
 
     dnfi curl wget git trash-cli tree fzf ripgrep tmux pkg-config urlview
     dnfi neovim zsh zsh-syntax-highlighting zsh-autosuggestions fd-find
     dnfi unar unzip p7zip zoxide ShellCheck git-extras zip gawk
+
+    has_cmd snap && return 1
 
     slog "Setting up snapd"
     dnfi snapd
@@ -105,10 +121,16 @@ micro_install() {
 }
 
 cockpit_install() {
+    has_cmd cockpit && return 1
+
+    slog "Installing cockpit"
+
     dnfi cockpit
     sudo systemctl enable --now cockpit.socket
     sudo firewall-cmd --add-service=cockpit
     sudo firewall-cmd --add-service=cockpit --permanent
+
+    slog "cockpit installation done!"
 }
 
 docker_install() {
@@ -134,10 +156,16 @@ docker_install() {
 
 astronvim_install() {
     slog "Installing AstroNvim"
-    trash ~/.config/nvim
-    trash ~/.local/share/nvim ~/.local/share/nvim.bak
-    trash ~/.local/state/nvim ~/.local/state/nvim.bak
-    trash ~/.cache/nvim ~/.cache/nvim.bak
+
+    srm ~/.config/nvim.bak
+    srm ~/.local/share/nvim.bak
+    srm ~/.local/state/nvim.bak
+    srm ~/.cache/nvim.bak
+
+    fmv ~/.config/nvim ~/.config/nvim.bak
+    fmv ~/.local/share/nvim ~/.local/share/nvim.bak
+    fmv ~/.local/state/nvim ~/.local/state/nvim.bak
+    fmv ~/.cache/nvim ~/.cache/nvim.bak
 
     git clone --depth 1 https://github.com/AstroNvim/AstroNvim ~/.config/nvim
 
