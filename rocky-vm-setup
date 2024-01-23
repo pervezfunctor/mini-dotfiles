@@ -73,20 +73,18 @@ essential_install() {
 
     slog "Installing essential fedora packages"
 
-    dnfi install epel-release
+    dnfi epel-release
 
     dnfi curl wget git trash-cli tree fzf ripgrep tmux pkg-config urlview
     dnfi neovim zsh zsh-syntax-highlighting zsh-autosuggestions fd-find
     dnfi unar unzip p7zip zoxide gh ShellCheck git-extras zip gawk
 
-    has_cmd gh && gh extension install github/gh-copilot
-
     slog "Setting up snapd"
     dnfi snapd
-
+    sudo systemctl enable --now snapd.socket
     [ -e /snap ] || sudo ln -s /var/lib/snapd/snap /snap
     sudo snap install fasd --beta
-
+    sleep 5
     slog "snapd setup done!"
 }
 
@@ -99,7 +97,7 @@ micro_install() {
 
     slog "Installing micro"
 
-    dnfi install curl tar -y
+    dnfi curl tar -y
     curl https://getmic.ro | bash
     sudo mv micro /usr/bin/
 
@@ -107,7 +105,7 @@ micro_install() {
 }
 
 cockpit_install() {
-    dnfi install cockpit
+    dnfi cockpit
     sudo systemctl enable --now cockpit.socket
     sudo firewall-cmd --add-service=cockpit
     sudo firewall-cmd --add-service=cockpit --permanent
@@ -119,9 +117,9 @@ docker_install() {
     slog "Installing docker"
 
     dnfi dnf-plugins-core
-    sudo dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
-    dnfi docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-    sudo systemctl start docker
+    sudo dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+    sudo dnfi docker-ce docker-ce-cli containerd.io docker-compose-plugin
+    sudo systemctl --now enable docker
 
     slog "Setting up docker user group"
     sudo groupadd docker
