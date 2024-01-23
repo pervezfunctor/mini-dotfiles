@@ -118,7 +118,7 @@ docker_install() {
 
     dnfi dnf-plugins-core
     sudo dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-    sudo dnfi docker-ce docker-ce-cli containerd.io docker-compose-plugin
+    dnfi docker-ce docker-ce-cli containerd.io docker-compose-plugin
     sudo systemctl --now enable docker
 
     slog "Setting up docker user group"
