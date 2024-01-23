@@ -77,7 +77,7 @@ essential_install() {
 
     dnfi curl wget git trash-cli tree fzf ripgrep tmux pkg-config urlview
     dnfi neovim zsh zsh-syntax-highlighting zsh-autosuggestions fd-find
-    dnfi unar unzip p7zip zoxide gh ShellCheck git-extras zip gawk
+    dnfi unar unzip p7zip zoxide ShellCheck git-extras zip gawk
 
     slog "Setting up snapd"
     dnfi snapd
