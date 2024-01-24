@@ -95,13 +95,78 @@ essential_install() {
 
     has_cmd snap && return 1
 
-    slog "Setting up snapd"
+    slog "Installing snapd"
     dnfi snapd
     sudo systemctl enable --now snapd.socket
     [ -e /snap ] || sudo ln -s /var/lib/snapd/snap /snap
     sudo snap install fasd --beta
     sleep 5
     slog "snapd setup done!"
+}
+
+gh_install() {
+    has_cmd gh && return 1
+
+    slog "Installing up gh"
+
+    dnfi 'dnf-command(config-manager)'
+    sudo dnf config-manager --add-repo https://cli.github.com/packages/rpm/gh-cli.repo
+    dnfi gh
+
+    slog "gh setup done!"
+}
+
+lazygit_install() {
+    has_cmd lazygit && return 1
+
+    slog "Installing lazygit"
+    sudo dnf copr enable atim/lazygit -y
+    sudo dnf install lazygit
+
+    slog "lazygit installation done!"
+}
+
+gdu_install() {
+    has_cmd gdu && return 1
+
+    slog "Installing gdu"
+    sudo dnf copr enable copr.fedorainfracloud.org/faramirza/gdu -y
+    dnfi gdu
+    slog "gdu installation done!"
+}
+
+bottom_install() {
+    has_cmd bottom && return 1
+
+    slog "Installing bottom"
+
+    sudo dnf copr enable atim/bottom -y
+    dnfi bottom
+
+    slog "bottom installation done!"
+}
+
+pnpm_install() {
+    has_cmd pnpm && return 0
+
+    if has_cmd curl; then
+        curl -fsSL https://get.pnpm.io/install.sh | sh -
+    elif has_cmd wget; then
+        wget -qO- https://get.pnpm.io/install.sh | sh -
+    else
+        echo "curl  or wget must be installed"
+        return 1
+    fi
+
+    echo "Installing node"
+    pnpm env use --global latest
+
+    pnpm install-completion bash
+    pnpm install-completion zsh
+    pnpm install -g degit install tree-sitter-cli tldr gtop
+    pnpm install -g @githubnext/github-copilot-cli
+
+    slog "pnpm Installtion done!"
 }
 
 dotfiles_install() {
@@ -212,9 +277,15 @@ installer() {
     micro_install
     zsh_install
     cpp_install
-    astronvim_install
     code_server_install
     docker_install
+    cockpit_install
+    gh_install
+    lazygit_install
+    gdu_install
+    bottom_install
+    pnpm_install
+    astronvim_install
 
     echo "Set zsh as default"
     sudo chsh -s $(which zsh) $(whoami)
