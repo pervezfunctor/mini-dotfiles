@@ -12,7 +12,7 @@ emacs_install() {
   git clone pervezfunctor/doomemacs-config doom
   sudo update-locale LANG=en_US.UTF8
 
-  sudo apt-get install -y  emacs-nox
+  sudo apt-get install -y emacs-nox
 }
 
 installer() {

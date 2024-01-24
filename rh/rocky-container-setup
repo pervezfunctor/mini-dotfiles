@@ -140,7 +140,7 @@ zsh_install() {
     sclone --depth=1 https://github.com/sindresorhus/pure.git ~/.zsh/pure
     sclone --depth=1 https://github.com/djui/alias-tips.git ~/.zsh/alias-tips
 
-    fln "${DOT_DIR}/zshrc" ~/.zshrc
+    fln "${DOT_DIR}/configs/zshrc" ~/.zshrc
 }
 
 installer() {
