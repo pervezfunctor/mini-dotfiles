@@ -99,8 +99,10 @@ essential_install() {
     dnfi snapd
     sudo systemctl enable --now snapd.socket
     [ -e /snap ] || sudo ln -s /var/lib/snapd/snap /snap
-    sudo snap install fasd --beta
     sleep 5
+
+    sudo snap install fasd --beta
+
     slog "snapd setup done!"
 }
 
@@ -257,6 +259,7 @@ code_server_install() {
     # curl -L https://coder.com/install.sh | sh
     # slog "coder installation done!"
 }
+
 # zsh
 
 zsh_install() {

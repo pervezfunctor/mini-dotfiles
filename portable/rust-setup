@@ -2,6 +2,8 @@
 
 {
 
+source bash -c "$(curl -fsSL https://raw.githubusercontent.com/pervezfunctor/mini-seartipy/master/portable/utils)"
+
 rust_install() {
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 }
@@ -10,8 +12,6 @@ installer() {
     rust_install
 }
 
-echo "Installing Rust..."
-rm -f ~/.seartipy-error.log ~/.seartipy-output.log 2> /dev/null
-installer > >(tee ~/.seartipy-output.log) 2> >(tee ~/.seartipy-error.log >&2)
+install "rust"
 
 }

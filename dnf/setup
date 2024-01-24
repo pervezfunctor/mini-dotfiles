@@ -65,25 +65,17 @@ dnfi() {
 }
 
 essential_install() {
-    slog "Updating fedora"
+    slog "Updating OS"
 
     if ! { sudo dnf update -y && sudo dnf upgrade -y; }; then
         err_exit "dnf update/upgrade failed, quitting"
     fi
 
-    slog "Installing essential fedora packages"
+    slog "Installing essential packages"
     dnfi curl wget git trash-cli tree fzf ripgrep
     dnfi tmux pkg-config urlview cascadia-fonts-all
     dnfi zsh zsh-syntax-highlighting zsh-autosuggestions fd-find
-
-    dnfi unar unzip p7zip zoxide exa gh
-    dnfi ShellCheck git-extras zip gawk
-
-    slog "Setting up snapd"
-    dnfi snapd
-
-    [ -e /snap ] || sudo ln -s /var/lib/snapd/snap /snap
-    sudo snap install fasd --beta
+    dnfi unar unzip p7zip zoxide ShellCheck git-extras zip gawk
 }
 
 dotfiles_install() {
@@ -102,10 +94,25 @@ zsh_install() {
     fln "${DOT_DIR}/configs/zshrc" ~/.zshrc
 }
 
+# micro
+
+micro_install() {
+    has_cmd micro && return 1
+
+    slog "Installing micro"
+
+    dnfi curl tar -y
+    curl https://getmic.ro | bash
+    sudo mv micro /usr/bin/
+
+    slog "micro installation done!"
+}
+
 installer() {
     essential_install
     dotfiles_install
     zsh_install
+    micro_install
 
     echo "Set zsh as default"
     sudo chsh -s $(which zsh) $(whoami)
@@ -118,7 +125,7 @@ keep_sudo_running() {
     while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 }
 
-is_fedora || err_exit "This installer works only on Fedora. Quitting."
+is_fedora || err_exit "This script works only on Fedora/RockyLinux. Quitting."
 
 curdir=$(pwd)
 
