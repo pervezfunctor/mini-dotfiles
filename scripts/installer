@@ -6,11 +6,9 @@
 source <(curl -fsSL https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/scripts/utils)
 
 main() {
-  install_all "${opts[@]}"
+  install_all "$@"
 }
 
-# bootstrap "searcdtipy development setup"
-
-main
+bootstrap "searcdtipy development setup"
 
 }

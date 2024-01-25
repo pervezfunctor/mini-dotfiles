@@ -149,4 +149,42 @@ lxd_install() {
     slog "lxd installation done! Start using it right now with `newgrp lxd`, followed by `lxd init`"
 }
 
+emacs_install() {
+  git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.config/emacs
+  mv ~/.config/doom ~/.config/doom.backup
+  sclone https://github.com/pervezfunctor/doomemacs-config ~/.config/doom
+
+  has_cmd update-locale && sudo update-locale LANG=en_US.UTF8
+
+  if has_cmd apt-get; then
+    sudo apt-get install -y emacs-nox
+  elif has_cmd dnf; then
+    sudo dnf install -y emacs-nox
+  else
+    err_exit "emacs can't be installed: unknown os"
+  fi
+}
+
+
+git_config() {
+    is_wsl && git config --global credential.helper "/mnt/c/Program\ Files/Git/mingw64/bin/git-credential-manager-core.exe"
+    git config --global init.defaultBranch main
+    git config --global pull.ff only
+
+    if $USER == "pervez"; then
+        git config --global user.name "Pervez Iqbal"
+        git config --global user.email "pervefunctor@gmail.com"
+    fi
+}
+
+git_install() {
+    curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+    sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+    sudo apt-get update
+    sudo apt-get install gh -y
+
+    git_config
+}
+
 }

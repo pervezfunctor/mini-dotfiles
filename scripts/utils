@@ -170,10 +170,12 @@ bootstrap() {
 
     curdir=$(pwd)
 
-    slog "Installing $1..."
-    rm -f ~/.seartipy-error.log ~/.seartipy-output.log 2> /dev/null
+    slog "Installing $@ ..."
+
+    rm -f /tmp/.seartipy-error.log /tmp/.seartipy-output.log 2> /dev/null
     keep_sudo_running
     min_packages_for_installer
+
     source <(curl -fsSL https://raw.githubusercontent.com/pervezfunctor/mini-seartipy/master/scripts/installs)
 
     if has_cmd apt; then
@@ -182,25 +184,24 @@ bootstrap() {
         source <(curl -fsSL https://raw.githubusercontent.com/pervezfunctor/mini-seartipy/master/dnf/common)
     fi
 
-    main > >(tee ~/.seartipy-output.log) 2> >(tee ~/.seartipy-error.log >&2)
+    main "$@" > >(tee /tmp/.seartipy-output.log) 2> >(tee /tmp/.seartipy-error.log >&2)
 
-    slog "Installation done! Look at ~/.seartipy-error.log for any errors."
+    slog "Installation done! Look at /tmp/.seartipy-error.log for any errors."
 
     cd "$curdir"
 }
 
 install_one() {
-  if fn_exists "${1}_install"; then
-    slog "Installing $1"
-    "${1}_install"
-  fi
+    if fn_exists "${1}_install"; then
+        "${1}_install"
+    fi
 }
 
 install_all() {
-  while [[ $# -gt 0 ]]; do
-    install_one "$1"
-    shift
-  done
+    while [[ "$#" -gt 0 ]]; do
+        install_one "$1"
+        shift
+    done
 }
 
 }
