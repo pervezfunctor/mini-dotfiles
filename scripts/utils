@@ -17,13 +17,16 @@ ${BOLD}${RED}FATAL: ${RESET} $1
     exit 1
 }
 
-
 dir_exists() {
     [[ -d "$1" ]]
 }
 
 file_exists() {
     [[ -f "$1" ]]
+}
+
+exists() {
+    [[ -e "$1" ]]
 }
 
 has_cmd() {
@@ -151,6 +154,14 @@ min_packages_for_installer() {
     fi
 }
 
+source_curl() {
+    source <(curl -fsSL "$1")
+}
+
+sh_curl() {
+    curl -fsSL "$1" | bash
+}
+
 bootstrap() {
     export PATH="$HOME/bin:$PATH"
     export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
@@ -165,12 +176,12 @@ bootstrap() {
     keep_sudo_running
     min_packages_for_installer
 
-    source <(curl -fsSL https://raw.githubusercontent.com/pervezfunctor/mini-seartipy/master/scripts/installs)
+    source_curl https://raw.githubusercontent.com/pervezfunctor/mini-seartipy/master/scripts/installs
 
     if has_cmd apt; then
-        source <(curl -fsSL https://raw.githubusercontent.com/pervezfunctor/mini-seartipy/master/apt/common)
+        source_curl https://raw.githubusercontent.com/pervezfunctor/mini-seartipy/master/apt/common
     elif has_cmd dnf; then
-        source <(curl -fsSL https://raw.githubusercontent.com/pervezfunctor/mini-seartipy/master/dnf/common)
+        source_curl https://raw.githubusercontent.com/pervezfunctor/mini-seartipy/master/dnf/common
     fi
 
     main "$@" > >(tee /tmp/.seartipy-output.log) 2> >(tee /tmp/.seartipy-error.log >&2)

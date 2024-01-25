@@ -161,10 +161,10 @@ alias -g ......="../../../../../"
 
 ssource "$HOME/.cargo/env"
 
-export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
-
-export PATH="$PATH:/usr/local/go/bin"
 export DOTNET_ROOT="$HOME/.dotnet"
+export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+export PATH="$PATH:/usr/local/go/bin"
+export PATH="$PATH:/.local/bin"
 
 # export DOCKER_HOST=unix:///run/user/1000/docker.sock
 export PATH="/usr/bin:$PATH"
