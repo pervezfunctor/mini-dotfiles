@@ -1,0 +1,152 @@
+#! /usr/bin/env bash
+
+{
+
+astro_install() {
+    slog "Installing AstroNvim"
+
+    srm ~/.config/nvim.bak
+    srm ~/.local/share/nvim.bak
+    srm ~/.local/state/nvim.bak
+    srm ~/.cache/nvim.bak
+
+    fmv ~/.config/nvim ~/.config/nvim.bak
+    fmv ~/.local/share/nvim ~/.local/share/nvim.bak
+    fmv ~/.local/state/nvim ~/.local/state/nvim.bak
+    fmv ~/.cache/nvim ~/.cache/nvim.bak
+
+    git clone --depth 1 https://github.com/AstroNvim/AstroNvim ~/.config/nvim
+
+    slog "AstroNvim installation done!"
+}
+
+code_server_install() {
+    has_cmd code-server && return 1
+
+    slog "Installing code-server"
+    curl -fsSL https://code-server.dev/install.sh | sh
+    slog "code-server installation done!"
+
+    # slog "Installing coder"
+    # curl -L https://coder.com/install.sh | sh
+    # slog "coder installation done!"
+}
+
+zsh_install() {
+    slog "Installing zsh"
+
+    smd ~/.zsh
+    sclone --depth=1 https://github.com/sindresorhus/pure.git ~/.zsh/pure
+    sclone --depth=1 https://github.com/djui/alias-tips.git ~/.zsh/alias-tips
+
+    fln "${DOT_DIR}/configs/zshrc" ~/.zshrc
+
+    slog "zsh installation done!"
+}
+
+micro_install() {
+    has_cmd micro && return 1
+
+    slog "Installing micro"
+
+    dnfi curl tar -y
+    curl https://getmic.ro | bash
+    sudo mv micro /usr/bin/
+
+    slog "micro installation done!"
+}
+
+rust_install() {
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+}
+
+miniconda_install() {
+    has_cmd conda && return 0
+    dir_exists ~/miniconda3 && return 0
+
+    smd ~/miniconda3
+    download_to https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh
+    bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3
+    srm ~/miniconda3/miniconda.sh
+    has_cmd bash && ~/miniconda3/bin/conda init bash
+    has_cmd zsh && ~/miniconda3/bin/conda init zsh
+}
+
+pnpm_install() {
+    # has_cmd pnpm && return 0
+
+    echo "Installing pnpm"
+    if has_cmd curl; then
+        curl -fsSL https://get.pnpm.io/install.sh | sh -
+    elif has_cmd wget; then
+        wget -qO- https://get.pnpm.io/install.sh | sh -
+    else
+        echo "curl  or wget must be installed"
+        return 1
+    fi
+
+    echo "Installing node"
+    pnpm env use --global latest
+
+    pnpm install-completion bash
+    pnpm install-completion zsh
+
+    echo "Installing npm packages globally"
+    pnpm install -g npm-check-updates degit tldr gtop ndb @antfu/ni
+    pnpm install -g tsx vite-node zx turbo
+    pnpm install -g @githubnext/github-copilot-cli
+    if ! grep "fs.inotify.max_user_watches" /etc/sysctl.conf > /dev/null; then
+        echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf > /dev/null && sudo sysctl -p
+    fi
+
+    if has_cmd apt; then
+        pnpm dlx playwright install-deps
+        pnpm dlx playwright install
+    fi
+}
+
+brew_install() {
+    has_cmd brew && return 0
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+}
+
+monaspace_install() {
+    wget https://github.com/githubnext/monaspace/releases/download/v1.000/monaspace-v1.000.zip
+    unzip -d monaspace monaspace-v1.000.zip
+    smd ~/.local/share/fonts
+    # TODO: Don't copy if already exists
+    cp ./monaspace/monaspace-v1.000/fonts/otf/* ~/.local/share/fonts
+    cp ./monaspace/monaspace-v1.000/fonts/variable/* ~/.local/share/fonts
+    trash monaspace monaspace-v1.000.zip
+}
+
+nerd_font_install() {
+    wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/CascadiaMono.zip
+    unzip -d monaspace CascadiaMono.zip
+    cp ./monaspace/*.ttf .local/share/fonts
+    trash monaspace CascadiaMono.zip
+
+    wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/Monaspace.zip
+    unzip -d monaspace Monaspace.zip
+    cp ./monaspace/*.otf .local/share/fonts
+    trash monaspace Monaspace.zip
+}
+
+lxd_install() {
+    has_cmd lxd && return 1
+
+    slog "Installing lxd"
+
+    sudo snap install lxd
+
+    slog "Setting up lxd service"
+    sudo snap enable lxd
+    sudo snap services lxd
+
+    slog "Setting up lxd user group"
+    sudo usermod -a -G lxd $USER
+    id $USER
+    slog "lxd installation done! Start using it right now with `newgrp lxd`, followed by `lxd init`"
+}
+
+}

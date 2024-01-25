@@ -1,0 +1,70 @@
+#! /usr/bin/env bash
+
+{
+
+source <(curl -fsSL https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/scripts/utils)
+
+essential_install() {
+    essential_core_install
+
+    dnfi cascadia-fonts-all jetbrains-mono-fonts-all micro
+}
+
+sys_install() {
+    sudo dnf groupinstall -y --with-optional "virtualization"
+    sudo dnf groupinstall -y --with-optional "System Tools"
+
+    dnfi toolbox buildah distrobox
+
+    sudo systemctl start libvirtd
+    sudo systemctl enable libvirtd
+}
+
+cpp_desktop_install() {
+    slog "Installing C++ tools"
+
+    sudo dnf groupinstall -y --with-optional "Development Tools"
+    sudo dnf groupinstall -y --with-optional "C Development Tools and Libraries"
+    dnfi cmake gcc-c++ clang llvm boost clang-tools-extra pre-commit
+
+    slog "C++ tools installation done!"
+}
+
+flatpak_apps_install() {
+    # flatpak install -y --user flathub com.visualstudio.code
+    flatpak install -y --user flathub org.telegram.desktop
+    flatpak install -y --user flathub com.jetbrains.CLion
+    flatpak install -y --user flathub com.google.Chrome
+    flatpak install -y --user flathub org.deluge_torrent.deluge
+    flatpak install -y --user flathub us.zoom.Zoom
+}
+
+apps_install() {
+    dnfi virt-manager chromium neovim emacs
+    flatpak_apps_install
+}
+
+main() {
+    essential_install
+    flathub_install
+    snap_install
+
+    dotfiles_install
+
+    zsh_install
+    docker_install
+    lxd_install
+    cpp_desktop_install
+    monaspace_install
+    code_install
+    sys_install
+    apps_install
+
+    set_zsh_as_default
+}
+
+is_fedora || err_exit "This script works only on Fedora. Quitting."
+
+bootstrap "Fedora desktop setup"
+
+}
