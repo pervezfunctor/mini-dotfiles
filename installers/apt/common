@@ -3,63 +3,56 @@
 {
 
 apti() {
-    for p in "$@"; do
-        slog "Installing package $p"
-        is_debian && sudo apt-get -y install --no-install-recommends "$p"
-        is_ubuntu && sudo apt-get -y install "$p"
-    done
+  for p in "$@"; do
+    slog "Installing package $p"
+    is_debian && sudo apt-get -y install --no-install-recommends "$p"
+    is_ubuntu && sudo apt-get -y install "$p"
+  done
 }
 
+essential_install() {
+  slog "Updating ubuntu"
 
-essential_core_install() {
-    slog "Updating ubuntu"
+  if ! { sudo apt-get update && sudo apt-get upgrade -y; }; then
+    err_exit "apt-get update/upgrade failed, quitting"
+  fi
 
-    if ! { sudo apt-get update && sudo apt-get upgrade -y; }; then
-        err_exit "apt-get update/upgrade failed, quitting"
-    fi
+  apti software-properties-common apt-transport-https ca-certificates
 
-    apti software-properties-common apt-transport-https ca-certificates
+  slog "Installing essential ubuntu packages"
+  apti curl wget git trash-cli tree fzf ripgrep nala
+  apti tmux libzmq3-dev pkg-config urlview
+  apti zsh fasd zsh-syntax-highlighting zsh-autosuggestions fd-find
 
-    slog "Installing essential ubuntu packages"
-    apti curl wget git trash-cli tree fzf ripgrep nala
-    apti tmux libzmq3-dev pkg-config urlview
-    apti fonts-cascadia-code fonts-jetbrains-mono
-    apti zsh fasd zsh-syntax-highlighting zsh-autosuggestions fd-find
-
-    if is_ubuntu; then
-        apti unar unzip p7zip build-essential zoxide exa
-        apti python3 python3-pip python-is-python3
-        apti shellcheck git-extras zip gawk gcc gh xclip xsel
-    fi
+  if is_ubuntu; then
+    apti unar unzip p7zip build-essential zoxide exa
+    apti python3 python3-pip python-is-python3
+    apti shellcheck git-extras zip gawk gcc gh xclip xsel
+  fi
 }
 
 neovim_install() {
   has_cmd brew || return -1
-  has_cmd pnpm || return -1
-  has_cmd cargo || return -1
 
-  has_cmd pip || sudo apt-get install -y python3-pip python3-venv
-  has_cmd go || brew install golang
-
-  sudo update-locale LANG=en_US.UTF8
+  has_cmd update-locale && sudo update-locale LANG=en_US.UTF8
   brew install neovim lazygit bottom
-  sudo apt-get install -y luarocks gdu
+  apti luarocks gdu
 
-  pnpm install -g neovim
-  pip install neovim
-  cargo install tree-sitter-cli
-}
+  if has_cmd pnpm; then
+    pnpm install -g neovim
+  elif has_cmd npm; then
+    npm install -g neovim
+  fi
 
-astro_install() {
-  trash ~/.config/nvim
+  has_cmd pip && pip install neovim
 
-  trash ~/.local/share/nvim ~/.local/share/nvim.bak
-  trash ~/.local/state/nvim ~/.local/state/nvim.bak
-  trash ~/.cache/nvim ~/.cache/nvim.bak
-
-  git clone --depth 1 https://github.com/AstroNvim/AstroNvim ~/.config/nvim
-
-  git clone https://github.com/pervezfunctor/astronvim-config.git  ~/.config/nvim/lua/user
+  if has_cmd cargo; then
+    cargo install tree-sitter-cli
+  elif has_cmd pnpm; then
+    pnpm install -g tree-sitter-cli
+  else has_cmd npm; then
+    npm install -g tree-sitter-cli
+  fi
 }
 
 vscode_install() {
@@ -68,7 +61,7 @@ vscode_install() {
     wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | sudo apt-key add -
     sudo add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
     sudo apt-get update
-    sudo apt-get install code
+    apti code
 }
 
 dotnet_install() {
@@ -78,16 +71,16 @@ dotnet_install() {
     sudo dpkg -i packages-microsoft-prod.deb
     srm packages-microsoft-prod.deb
     sudo apt-get update
-    sudo apt-get install -y dotnet-sdk-8.0
+    apti dotnet-sdk-8.0
 }
 
-docker_setup() {
+docker_install() {
   has_cmd docker && return 0
 
   sudo apt-get update
 
   # Install required packages
-  sudo apt-get install -y apt-transport-https ca-certificates curl gnupg-agent software-properties-common
+  apti apt-transport-https ca-certificates curl gnupg-agent software-properties-common
 
   # Add Docker GPG key
   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
@@ -99,7 +92,7 @@ docker_setup() {
   sudo apt-get update
 
   # Install Docker Engine
-  sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+  apti docker-ce docker-ce-cli containerd.io
 
   # Install Docker Compose
   sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
@@ -113,7 +106,6 @@ docker_setup() {
   sudo systemctl enable containerd.service
 }
 
-
 chrome_install() {
   has_cmd google-chrome && return 0
 
@@ -125,6 +117,16 @@ chrome_install() {
   sudo apt-get -f install
 
   srm google-chrome-stable_current_amd64.deb
+}
+
+git_install() {
+  curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+  sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+  sudo apt-get update
+  apti gh
+
+  git_config
 }
 
 }

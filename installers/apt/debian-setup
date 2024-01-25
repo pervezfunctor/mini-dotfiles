@@ -7,7 +7,7 @@ source <(curl -fsSL https://raw.githubusercontent.com/pervezfunctor/mini-dotfile
 main() {
     dotfiles_install
 
-    essential_core_install
+    essential_install
 
     cpp_install
     docker_install

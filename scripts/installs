@@ -15,7 +15,7 @@ astro_install() {
     fmv ~/.local/state/nvim ~/.local/state/nvim.bak
     fmv ~/.cache/nvim ~/.cache/nvim.bak
 
-    git clone --depth 1 https://github.com/AstroNvim/AstroNvim ~/.config/nvim
+    shallo_clone https://github.com/AstroNvim/AstroNvim ~/.config/nvim
 
     slog "AstroNvim installation done!"
 }
@@ -36,8 +36,8 @@ zsh_install() {
     slog "Installing zsh"
 
     smd ~/.zsh
-    sclone --depth=1 https://github.com/sindresorhus/pure.git ~/.zsh/pure
-    sclone --depth=1 https://github.com/djui/alias-tips.git ~/.zsh/alias-tips
+    shallow_clone https://github.com/sindresorhus/pure.git ~/.zsh/pure
+    shallow_clone https://github.com/djui/alias-tips.git ~/.zsh/alias-tips
 
     fln "${DOT_DIR}/configs/zshrc" ~/.zshrc
 
@@ -49,7 +49,6 @@ micro_install() {
 
     slog "Installing micro"
 
-    dnfi curl tar -y
     curl https://getmic.ro | bash
     sudo mv micro /usr/bin/
 
@@ -57,12 +56,18 @@ micro_install() {
 }
 
 rust_install() {
+    has_cmd rustup && return 1
+
+    slog "Installing rust"
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+    slog "rust installation done!"
 }
 
 miniconda_install() {
     has_cmd conda && return 0
     dir_exists ~/miniconda3 && return 0
+
+    slog "Installing miniconda"
 
     smd ~/miniconda3
     download_to https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh
@@ -70,20 +75,15 @@ miniconda_install() {
     srm ~/miniconda3/miniconda.sh
     has_cmd bash && ~/miniconda3/bin/conda init bash
     has_cmd zsh && ~/miniconda3/bin/conda init zsh
+
+    slog "miniconda installation done!"
 }
 
 pnpm_install() {
     # has_cmd pnpm && return 0
 
     echo "Installing pnpm"
-    if has_cmd curl; then
-        curl -fsSL https://get.pnpm.io/install.sh | sh -
-    elif has_cmd wget; then
-        wget -qO- https://get.pnpm.io/install.sh | sh -
-    else
-        echo "curl  or wget must be installed"
-        return 1
-    fi
+    curl -fsSL https://get.pnpm.io/install.sh | sh -
 
     echo "Installing node"
     pnpm env use --global latest
@@ -107,7 +107,10 @@ pnpm_install() {
 
 brew_install() {
     has_cmd brew && return 0
+
+    slog "Installing homebrew"
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    slog "homebrew installation done!"
 }
 
 monaspace_install() {
@@ -132,7 +135,23 @@ nerd_font_install() {
     trash monaspace Monaspace.zip
 }
 
+fonts_install() {
+    slog "Installing fonts"
+
+    monaspace_install
+    nerd_font_install
+
+    if has_cmd apt; then
+        apti fonts-cascadia-code fonts-jetbrains-mono
+    elif has_cmd dnf; then
+        dnfi cascadia-fonts-all jetbrains-mono-fonts-all
+    fi
+
+    slog "Fonts installation done!"
+}
+
 lxd_install() {
+    has_cmd snap || err_exit "for installing lxd, snap must be installed"
     has_cmd lxd && return 1
 
     slog "Installing lxd"
@@ -150,19 +169,21 @@ lxd_install() {
 }
 
 emacs_install() {
-  git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.config/emacs
-  mv ~/.config/doom ~/.config/doom.backup
-  sclone https://github.com/pervezfunctor/doomemacs-config ~/.config/doom
+    slog "Installing emacs"
 
-  has_cmd update-locale && sudo update-locale LANG=en_US.UTF8
+    shallow_clone https://github.com/doomemacs/doomemacs ~/.config/emacs
+    mv ~/.config/doom ~/.config/doom.backup
+    sclone https://github.com/pervezfunctor/doomemacs-config ~/.config/doom
 
-  if has_cmd apt-get; then
-    sudo apt-get install -y emacs-nox
-  elif has_cmd dnf; then
-    sudo dnf install -y emacs-nox
-  else
-    err_exit "emacs can't be installed: unknown os"
-  fi
+    has_cmd update-locale && sudo update-locale LANG=en_US.UTF8
+
+    if has_cmd apt-get; then
+      apti -y emacs-nox
+    elif has_cmd dnf; then
+        dnfi emacs-nox
+    fi
+
+    slog "emacs installation done!"
 }
 
 
@@ -177,14 +198,12 @@ git_config() {
     fi
 }
 
-git_install() {
-    curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
-    sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-    sudo apt-get update
-    sudo apt-get install gh -y
+go_install() {
+    has_cmd go && return 1
 
-    git_config
+    slog "Installing go"
+    srm /usr/local/go && tar -C /usr/local -xzf go1.21.6.linux-amd64.tar.gz
+    slog "go installation done!"
 }
 
 }

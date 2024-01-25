@@ -5,7 +5,7 @@
 source <(curl -fsSL https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/scripts/utils)
 
 main() {
-    essential_core_install
+    essential_install
     dotfiles_install
 
     zsh_install

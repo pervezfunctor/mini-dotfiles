@@ -5,27 +5,25 @@
 dnfi() {
     for p in "$@"; do
     slog "Installing package $p"
-        sudo dnf  -y install "$p"
+        sudo dnf -y install "$p"
     done
 }
 
-essential_core_install() {
-    slog "Updating Rocky Linux"
+essential_install() {
+    slog "Updating packages"
 
     if ! { sudo dnf update -y && sudo dnf upgrade -y; }; then
         err_exit "dnf update/upgrade failed, quitting"
     fi
 
-    slog "Installing essential rocky linux packages"
+    slog "Installing essential packages"
 
     sudo dnf config-manager --set-enabled crb
-    dnfi epel-release
 
     dnfi curl wget git trash-cli tree fzf ripgrep tmux pkg-config urlview
     dnfi neovim zsh zsh-syntax-highlighting zsh-autosuggestions fd-find
     dnfi unar unzip p7zip zoxide ShellCheck git-extras zip gawk
 }
-
 
 snap_install() {
     has_cmd snap && return 1
@@ -58,7 +56,7 @@ lazygit_install() {
 
     slog "Installing lazygit"
     sudo dnf copr enable atim/lazygit -y
-    sudo dnf install lazygit
+    dnfi lazygit
 
     slog "lazygit installation done!"
 }
@@ -131,7 +129,6 @@ flathub_install() {
     has_cmd flatpak || return 1
     flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo --user
 }
-
 
 code_install() {
     has_cmd code && return 1

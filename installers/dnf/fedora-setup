@@ -4,12 +4,6 @@
 
 source <(curl -fsSL https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/scripts/utils)
 
-essential_install() {
-    essential_core_install
-
-    dnfi cascadia-fonts-all jetbrains-mono-fonts-all micro
-}
-
 sys_install() {
     sudo dnf groupinstall -y --with-optional "virtualization"
     sudo dnf groupinstall -y --with-optional "System Tools"
@@ -20,7 +14,7 @@ sys_install() {
     sudo systemctl enable libvirtd
 }
 
-cpp_desktop_install() {
+cpp_fedora_install() {
     slog "Installing C++ tools"
 
     sudo dnf groupinstall -y --with-optional "Development Tools"
@@ -46,6 +40,8 @@ apps_install() {
 
 main() {
     essential_install
+    dnfi micro
+
     flathub_install
     snap_install
 
@@ -54,7 +50,7 @@ main() {
     zsh_install
     docker_install
     lxd_install
-    cpp_desktop_install
+    cpp_fedora_install
     monaspace_install
     code_install
     sys_install

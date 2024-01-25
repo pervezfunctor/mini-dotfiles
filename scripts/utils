@@ -40,6 +40,10 @@ sclone() {
     git clone "$@"
 }
 
+shallow_clone() {
+    sclone "$@" --depth=1
+}
+
 smd() {
     [ -d "$1" ] && return 1
 
@@ -133,30 +137,15 @@ set_zsh_as_default() {
     sudo chsh -s $(which zsh) $(whoami)
 }
 
-git_core_install() {
-    has_cmd git && return 1
-
-    if has_cmd apt; then
-        sudo apt-get install -y git-core
-    elif has_cmd dnf; then
-        sudo dnf install -y git-core
-    elif has_cmd pacman; then
-        sudo pacman -S --noconfirm git
-    else
-        err_exit "git must be installed"
-    fi
-}
-
 dotfiles_install() {
-    git_core_install
     sclone https://github.com/pervezfunctor/mini-dotfiles.git "${DOT_DIR}"
 }
 
 min_packages_for_installer() {
     if is_apt; then
-        sudo apt-get install -y curl wget git-core trash-cli
+        sudo apt-get install -y curl wget git-core tar unzip trash-cli
     elif is_rh; then
-        sudo dnf install -y curl wget git-core trash-cli
+        sudo dnf install -y curl wget git-core tar unzip trash-cli
     else
         err_exit "This installer works only on Debian/Ubuntu or Fedora/Rocky/CentOS"
     fi
@@ -189,19 +178,6 @@ bootstrap() {
     slog "Installation done! Look at /tmp/.seartipy-error.log for any errors."
 
     cd "$curdir"
-}
-
-install_one() {
-    if fn_exists "${1}_install"; then
-        "${1}_install"
-    fi
-}
-
-install_all() {
-    while [[ "$#" -gt 0 ]]; do
-        install_one "$1"
-        shift
-    done
 }
 
 }
