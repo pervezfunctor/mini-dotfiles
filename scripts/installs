@@ -17,6 +17,13 @@ astro_install() {
 
     shallo_clone https://github.com/AstroNvim/AstroNvim ~/.config/nvim
 
+    if $USER == "pervez"; then
+        sclone https://github.com/pervezfunctor/astro-config.git ~/.config/nvim/lua/user
+    elif ! dir_exists ~/.config/nvim/lua/user; then
+        shallo_clone https://github.com/AstroNvim/user_example.git ~/.config/nvim/lua/user
+        trash ~/.config/nvim/lua/user/.git
+    fi
+
     slog "AstroNvim installation done!"
 }
 
@@ -204,6 +211,16 @@ go_install() {
     slog "Installing go"
     srm /usr/local/go && tar -C /usr/local -xzf go1.21.6.linux-amd64.tar.gz
     slog "go installation done!"
+}
+
+docker_common_install() {
+  sudo groupadd docker
+  # Add current user to docker group
+  sudo usermod -aG docker ${USER}
+
+  # Enable Docker to start on boot
+  sudo systemctl --now enable docker
+  sudo systemctl --now enable containerd
 }
 
 }

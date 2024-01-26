@@ -1,1 +1,57 @@
 
+#! /usr/bin/env bash
+
+{
+
+source <(curl -fsSL https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/scripts/utils)
+
+sys_install() {
+    apti virt-manager buildah
+    dnfi toolbox distrobox
+
+    sudo systemctl start libvirtd
+    sudo systemctl enable libvirtd
+}
+
+flatpak_apps_install() {
+    # flatpak install -y --user flathub com.visualstudio.code
+    flatpak install -y --user flathub org.telegram.desktop
+    flatpak install -y --user flathub com.jetbrains.CLion
+    flatpak install -y --user flathub com.google.Chrome
+    flatpak install -y --user flathub org.deluge_torrent.deluge
+    flatpak install -y --user flathub us.zoom.Zoom
+}
+
+apps_install() {
+    dnfi virt-manager chromium-browser emacs
+    neovim_install
+    emacs_install
+    flatpak_apps_install
+}
+
+main() {
+    essential_install
+
+    flathub_install
+    snap_install
+    brew_install
+    dotfiles_install
+
+    zsh_install
+    go_install
+    docker_install
+    lxd_install
+    cpp_install
+    fonts_install
+    vscode_install
+    sys_install
+    apps_install
+
+    set_zsh_as_default
+}
+
+is_apt || err_exit "This script works only on Ubuntu. Quitting."
+
+bootstrap "Ubuntu desktop setup"
+
+}

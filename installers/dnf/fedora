@@ -50,8 +50,8 @@ main() {
     docker_install
     lxd_install
     cpp_fedora_install
-    monaspace_install
-    code_install
+    fonts_install
+    vscode_install
     sys_install
     apps_install
 

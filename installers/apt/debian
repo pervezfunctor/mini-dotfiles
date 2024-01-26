@@ -4,6 +4,10 @@
 
 source <(curl -fsSL https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/scripts/utils)
 
+cockpit_install() {
+    apti cockpit
+}
+
 main() {
     dotfiles_install
 
@@ -11,23 +15,26 @@ main() {
 
     cpp_install
     docker_install
-    cockpit_install
-    gh_install
-    lazygit_install
-    gdu_install
-    bottom_install
 
-    micro_install
+    apti cockpit gh gdu micro
+
+    go_install
+
+    go install github.com/jesseduffield/lazygit@latest
+    # bottom_install
+
     zsh_install
     code_server_install
     pnpm_install
+
+    neovim_debian_install
     astro_install
 
     set_zsh_as_default
 }
 
-is_rocky|| err_exit "This installer works only on Rocky Linux. Quitting."
+is_debian || err_exit "This installer works only on Debian. Quitting."
 
-bootstrap "Rocky Linux development system"
+bootstrap "Debian development system"
 
 }
