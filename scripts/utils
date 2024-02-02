@@ -10,6 +10,12 @@ ${BOLD}${GREEN}SEARTIPY: ${RESET} $1
 "
 }
 
+warn() {
+    echo "
+${BOLD}${YELLOW}WARNING: ${RESET} $1
+"
+}
+
 err_exit() {
     echo "
 ${BOLD}${RED}FATAL: ${RESET} $1
@@ -43,8 +49,23 @@ sclone() {
     git clone "$@"
 }
 
+fclone() {
+    local dest=${*: -1}
+    local src=${*: -2:1}
+
+    srm "$dest"
+    slog "Cloning $src to $dest"
+    git clone "$@"
+}
+
 shallow_clone() {
     sclone "$@" --depth=1
+}
+
+smv() {
+    if mv "$1" "$2" 2> /dev/null; then
+        slog "Moved $1 to $2"
+    fi
 }
 
 smd() {
@@ -56,19 +77,26 @@ smd() {
 
 fln() {
     if [ -e "$1" ]; then
-        rm -f "$2"
+        trash "$2"
     else
-        echo "$1 does not exist, cannot create link $2"
+        slog "$1 does not exist, cannot create link $2"
         return 1
     fi
     slog "Creating link $2 to $1"
     ln -s "$1" "$2"
 }
-
 srm() {
-    if [ -e "$1" ]; then
-        trash "$1"
-    fi
+    for f in "$@"; do
+        if [ -L "$f" ]; then
+            rm -f "$f" && slog "Removing existing link $f"
+        elif has_cmd trash-put; then
+            trash-put "$f" 2> /dev/null && slog "Trashed $f"
+        elif has_cmd trash; then
+            trash "$f" 2> /dev/null && slog "Trashed $f"
+        else
+            warn "trash not installed, cannot rm $f"
+        fi
+    done
 }
 
 fmv() {
@@ -78,6 +106,19 @@ fmv() {
     mv "$1" "$2"
 }
 
+sln() {
+    if ! [ -e "$1" ]; then
+        warn "$1 does not exist, cannot create the link $2"
+        return 1
+    elif [ -L "$2" ]; then
+        srm "$2"
+    elif [ -e "$2" ]; then
+        warn "$2 exists and not a symbolic link! not creating link"
+        return 1
+    fi
+    slog "Creating link $2 to $1"
+    ln -s "$1" "$2"
+}
 
 is_debian() {
     has_cmd lsb_release || return 1
@@ -95,7 +136,7 @@ is_ubuntu() {
     has_cmd lsb_release || return 1
     local OS
     OS=$(lsb_release -i | cut -d ':' -f2)
-    [[ "$OS" == *"Ubuntu" ]]
+    [[ "$OS" == *"Ubuntu" ]] || [[ "$OS" == *"neon" ]] || [[ "$OS" == *"elementary" ]] || [[ "$OS" == *"LinuxMint" ]] || [[ "$OS" == *"Pop" ]]
 }
 
 is_apt() {
@@ -117,6 +158,52 @@ is_centos() {
 
 is_rh() {
     is_fedora || is_rocky || is_centos
+}
+
+is_linux() {
+    [[ "$OSTYPE" == "linux-gnu" ]]
+}
+
+is_mac() {
+    [[ "$OSTYPE" == "darwin"* ]]
+}
+
+
+pre_dir_check() {
+    for dir in "$@"; do
+        [ -d "$dir" ] || err_exit "$dir does not exist, quitting"
+    done
+}
+
+cmd_check() {
+    for cmd in "$@"; do
+        has_cmd "$cmd" || warn "$cmd not installed"
+    done
+}
+
+file_exists() {
+     [[ -f "$1" ]]
+}
+dir_check() {
+    for dir in "$@"; do
+        dir_exists "$dir" || warn "$dir does not exist"
+    done
+}
+
+ln_to_exists() {
+    local rl=readlink
+    is_mac && rl=greadlink
+    [[ "$1" == $($rl -f "$2") ]]
+}
+
+ln_check() {
+    ln_to_exists "$1" "$2" || warn "$2 not a link to $1"
+}
+
+file_check() {
+    for f in "$@"; do
+        [ -f "$f" ] || warn "$f does not exist"
+    done
 }
 
 keep_sudo_running() {
