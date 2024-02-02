@@ -13,6 +13,6 @@ main() {
     done
 }
 
-bootstrap "searcdtipy development setup"
+bootstrap "seartipy setup"
 
 }

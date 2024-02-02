@@ -5,11 +5,6 @@
 astro_install() {
     slog "Installing AstroNvim"
 
-    srm ~/.config/nvim.bak
-    srm ~/.local/share/nvim.bak
-    srm ~/.local/state/nvim.bak
-    srm ~/.cache/nvim.bak
-
     fmv ~/.config/nvim ~/.config/nvim.bak
     fmv ~/.local/share/nvim ~/.local/share/nvim.bak
     fmv ~/.local/state/nvim ~/.local/state/nvim.bak
@@ -22,6 +17,7 @@ astro_install() {
     elif ! dir_exists ~/.config/nvim/lua/user; then
         shallo_clone https://github.com/AstroNvim/user_example.git ~/.config/nvim/lua/user
         trash ~/.config/nvim/lua/user/.git
+        slog "Please configure AstroNvim by editing files in ~/.config/nvim/lua/user"
     fi
 
     slog "AstroNvim installation done!"
@@ -89,16 +85,16 @@ miniconda_install() {
 pnpm_install() {
     # has_cmd pnpm && return 0
 
-    echo "Installing pnpm"
+    slog "Installing pnpm"
     curl -fsSL https://get.pnpm.io/install.sh | sh -
 
-    echo "Installing node"
+    slog "Installing node"
     pnpm env use --global latest
 
     pnpm install-completion bash
     pnpm install-completion zsh
 
-    echo "Installing npm packages globally"
+    slog "Installing npm packages globally"
     pnpm install -g npm-check-updates degit tldr gtop ndb @antfu/ni
     pnpm install -g tsx vite-node zx turbo
     pnpm install -g @githubnext/github-copilot-cli
@@ -175,27 +171,33 @@ lxd_install() {
     slog "lxd installation done! Start using it right now with `newgrp lxd`, followed by `lxd init`"
 }
 
-emacs_install() {
-    slog "Installing emacs"
+doom_install() {
+    dir_exists ~/.config/emacs && return 1
 
     shallow_clone https://github.com/doomemacs/doomemacs ~/.config/emacs
     mv ~/.config/doom ~/.config/doom.backup
     sclone https://github.com/pervezfunctor/doomemacs-config ~/.config/doom
 
     has_cmd update-locale && sudo update-locale LANG=en_US.UTF8
+}
+
+emacs_install() {
+    slog "Installing emacs"
+
+    doom_install
 
     if has_cmd apt-get; then
-      apti -y emacs-nox
+      apti -y emacs
     elif has_cmd dnf; then
-        dnfi emacs-nox
+        dnfi emacs
     fi
 
     slog "emacs installation done!"
 }
 
-
 git_config() {
     is_wsl && git config --global credential.helper "/mnt/c/Program\ Files/Git/mingw64/bin/git-credential-manager-core.exe"
+
     git config --global init.defaultBranch main
     git config --global pull.ff only
 
@@ -215,10 +217,8 @@ go_install() {
 
 docker_common_install() {
   sudo groupadd docker
-  # Add current user to docker group
   sudo usermod -aG docker ${USER}
 
-  # Enable Docker to start on boot
   sudo systemctl --now enable docker
   sudo systemctl --now enable containerd
 }
