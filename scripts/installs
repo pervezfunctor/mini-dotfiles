@@ -39,8 +39,8 @@ zsh_install() {
     slog "Installing zsh"
 
     smd ~/.zsh
-    sclone https://github.com/sindresorhus/pure.git ~/.zsh/pure --depth=1
-    sclone https://github.com/djui/alias-tips.git ~/.zsh/alias-tips --depth=1
+    sclone --depth=1 https://github.com/sindresorhus/pure.git ~/.zsh/pure
+    sclone --depth=1 https://github.com/djui/alias-tips.git ~/.zsh/alias-tips
 
     fln "${DOT_DIR}/configs/zshrc" ~/.zshrc
 
@@ -174,7 +174,7 @@ lxd_install() {
 doom_install() {
     dir_exists ~/.config/emacs && return 1
 
-    sclone https://github.com/doomemacs/doomemacs ~/.config/emacs --depth=1
+    sclone --depth=1 https://github.com/doomemacs/doomemacs ~/.config/emacs
     mv ~/.config/doom ~/.config/doom.backup
     sclone https://github.com/pervezfunctor/doomemacs-config ~/.config/doom
 
