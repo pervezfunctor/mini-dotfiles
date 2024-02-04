@@ -181,6 +181,7 @@ cmd_check() {
 file_exists() {
      [[ -f "$1" ]]
 }
+
 dir_check() {
     for dir in "$@"; do
         dir_exists "$dir" || warn "$dir does not exist"
