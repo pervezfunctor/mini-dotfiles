@@ -29,6 +29,11 @@ apps_install() {
     flatpak_apps_install
 }
 
+snap_install() {
+    has_cmd snap && return 0
+    apti snap
+}
+
 main() {
     essential_install
 
