@@ -12,7 +12,7 @@ astro_install() {
 
     sclone --depth=1 https://github.com/AstroNvim/AstroNvim ~/.config/nvim
 
-    if $USER == "pervez"; then
+    if [[ "$USER" == "pervez" ]]; then
         sclone https://github.com/pervezfunctor/astro-config.git ~/.config/nvim/lua/user
     elif ! dir_exists ~/.config/nvim/lua/user; then
         sclone --depth=1 https://github.com/AstroNvim/user_example.git ~/.config/nvim/lua/user
@@ -53,7 +53,7 @@ micro_install() {
     slog "Installing micro"
 
     curl https://getmic.ro | bash
-    sudo mv micro /usr/bin/
+    sudo fmv micro /usr/bin/
 
     slog "micro installation done!"
 }
@@ -175,7 +175,7 @@ doom_install() {
     dir_exists ~/.config/emacs && return 1
 
     sclone --depth=1 https://github.com/doomemacs/doomemacs ~/.config/emacs
-    mv ~/.config/doom ~/.config/doom.backup
+    fmv ~/.config/doom ~/.config/doom.backup
     sclone https://github.com/pervezfunctor/doomemacs-config ~/.config/doom
 
     has_cmd update-locale && sudo update-locale LANG=en_US.UTF8
@@ -201,7 +201,7 @@ git_config() {
     git config --global init.defaultBranch main
     git config --global pull.ff only
 
-    if $USER == "pervez"; then
+    if [[ "$USER" == "pervez" ]]; then
         git config --global user.name "Pervez Iqbal"
         git config --global user.email "pervefunctor@gmail.com"
     fi
