@@ -270,9 +270,9 @@ bootstrap() {
     source_curl https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/scripts/installs
 
     if has_cmd apt; then
-        source_curl https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/apt/common
+        source_curl https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/installers/pt/common
     elif has_cmd dnf; then
-        source_curl https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/dnf/common
+        source_curl https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/installers/dnf/common
     fi
 
     main "$@" > >(tee /tmp/.seartipy-output.log) 2> >(tee /tmp/.seartipy-error.log >&2)
