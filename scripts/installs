@@ -12,13 +12,10 @@ astro_install() {
 
     sclone --depth=1 https://github.com/AstroNvim/AstroNvim ~/.config/nvim
 
-    if [[ "$USER" == "pervez" ]]; then
-        sclone https://github.com/pervezfunctor/astro-config.git ~/.config/nvim/lua/user
-    elif ! dir_exists ~/.config/nvim/lua/user; then
-        sclone --depth=1 https://github.com/AstroNvim/user_example.git ~/.config/nvim/lua/user
-        srm ~/.config/nvim/lua/user/.git
-        slog "Please configure AstroNvim by editing files in ~/.config/nvim/lua/user"
-    fi
+    sclone https://github.com/pervezfunctor/astro-config.git ~/.config/nvim/lua/user
+
+     [[ "$USER" == "pervez" ]] || srm ~/.config/nvim/lua/user/.git
+    slog "Please configure AstroNvim by editing files in ~/.config/nvim/lua/user"
 
     slog "AstroNvim installation done!"
 }
