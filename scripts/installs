@@ -10,13 +10,13 @@ astro_install() {
     fmv ~/.local/state/nvim ~/.local/state/nvim.bak
     fmv ~/.cache/nvim ~/.cache/nvim.bak
 
-    shallo_clone https://github.com/AstroNvim/AstroNvim ~/.config/nvim
+    sclone --depth=1 https://github.com/AstroNvim/AstroNvim ~/.config/nvim
 
     if $USER == "pervez"; then
         sclone https://github.com/pervezfunctor/astro-config.git ~/.config/nvim/lua/user
     elif ! dir_exists ~/.config/nvim/lua/user; then
-        shallo_clone https://github.com/AstroNvim/user_example.git ~/.config/nvim/lua/user
-        trash ~/.config/nvim/lua/user/.git
+        sclone --depth=1 https://github.com/AstroNvim/user_example.git ~/.config/nvim/lua/user
+        srm ~/.config/nvim/lua/user/.git
         slog "Please configure AstroNvim by editing files in ~/.config/nvim/lua/user"
     fi
 
@@ -123,19 +123,19 @@ monaspace_install() {
     # TODO: Don't copy if already exists
     cp ./monaspace/monaspace-v1.000/fonts/otf/* ~/.local/share/fonts
     cp ./monaspace/monaspace-v1.000/fonts/variable/* ~/.local/share/fonts
-    trash monaspace monaspace-v1.000.zip
+    srm monaspace monaspace-v1.000.zip
 }
 
 nerd_font_install() {
     wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/CascadiaMono.zip
     unzip -d monaspace CascadiaMono.zip
     cp ./monaspace/*.ttf .local/share/fonts
-    trash monaspace CascadiaMono.zip
+    srm monaspace CascadiaMono.zip
 
     wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/Monaspace.zip
     unzip -d monaspace Monaspace.zip
     cp ./monaspace/*.otf .local/share/fonts
-    trash monaspace Monaspace.zip
+    srm monaspace Monaspace.zip
 }
 
 fonts_install() {

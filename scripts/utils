@@ -73,7 +73,7 @@ smd() {
 
 fln() {
     if [ -e "$1" ]; then
-        trash "$2"
+        srm "$2"
     else
         slog "$1 does not exist, cannot create link $2"
         return 1
@@ -81,6 +81,7 @@ fln() {
     slog "Creating link $2 to $1"
     ln -s "$1" "$2"
 }
+
 srm() {
     for f in "$@"; do
         if [ -L "$f" ]; then
@@ -97,7 +98,7 @@ srm() {
 
 fmv() {
     if [ -e "$1" ]; then
-        trash "$2"
+        srm "$2"
     fi
     mv "$1" "$2"
 }
