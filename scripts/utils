@@ -99,6 +99,9 @@ srm() {
 fmv() {
     if [ -e "$1" ]; then
         srm "$2"
+    else
+        slog "$1 does not exist, cannot move to $2"
+        return 1
     fi
     mv "$1" "$2"
 }
