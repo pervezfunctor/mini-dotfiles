@@ -207,6 +207,7 @@ file_check() {
 }
 
 keep_sudo_running() {
+    slog "Keeping sudo alive"
     has_cmd sudo || err_exit "sudo must be installed"
     sudo -v
     while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
@@ -232,6 +233,8 @@ dotfiles_install() {
 }
 
 min_packages_for_installer() {
+    slog "Installing essential packages for the installer"
+
     if is_apt; then
         sudo apt-get install -y curl wget git-core tar unzip trash-cli
     elif is_rh; then
@@ -242,6 +245,7 @@ min_packages_for_installer() {
 }
 
 source_curl() {
+    slog "sourcing: $1"
     source <(curl -fsSL "$1")
 }
 
@@ -263,12 +267,12 @@ bootstrap() {
     keep_sudo_running
     min_packages_for_installer
 
-    source_curl https://raw.githubusercontent.com/pervezfunctor/mini-seartipy/master/scripts/installs
+    source_curl https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/scripts/installs
 
     if has_cmd apt; then
-        source_curl https://raw.githubusercontent.com/pervezfunctor/mini-seartipy/master/apt/common
+        source_curl https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/apt/common
     elif has_cmd dnf; then
-        source_curl https://raw.githubusercontent.com/pervezfunctor/mini-seartipy/master/dnf/common
+        source_curl https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/dnf/common
     fi
 
     main "$@" > >(tee /tmp/.seartipy-output.log) 2> >(tee /tmp/.seartipy-error.log >&2)
