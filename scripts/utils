@@ -59,7 +59,7 @@ fclone() {
 }
 
 shallow_clone() {
-    sclone "$@" --depth=1
+    sclone --depth=1 "$@"
 }
 
 smv() {
