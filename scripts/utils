@@ -58,10 +58,6 @@ fclone() {
     git clone "$@"
 }
 
-shallow_clone() {
-    sclone --depth=1 "$@"
-}
-
 smv() {
     if mv "$1" "$2" 2> /dev/null; then
         slog "Moved $1 to $2"

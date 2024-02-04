@@ -36,7 +36,7 @@ ssource() {
     fi
 }
 
-dir_exists ~/.zsh/pure || shallow_clone https://github.com/sindresorhus/pure.git ~/.zsh/pure
+dir_exists ~/.zsh/pure || sclone https://github.com/sindresorhus/pure.git ~/.zsh/pure --depth=1
 
 fpath+=($HOME/.zsh/pure)
 
@@ -49,7 +49,7 @@ if file_exists /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh; t
     source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 else
     if ! dir_exists ~/.zsh/zsh-syntax-highlighting; then
-        shallow_clone  https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.zsh/zsh-syntax-highlighting
+        sclone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.zsh/zsh-syntax-highlighting --depth=1
     fi
     ssource ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 fi
@@ -58,7 +58,7 @@ if file_exists /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh; then
     source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 else
     if ! dir_exists ~/.zsh/zsh-autosuggestions; then
-        shallow_clone  https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
+        sclone  https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions --depth=1
     fi
     ssource ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 fi
@@ -66,7 +66,7 @@ fi
 ssource /usr/share/doc/fzf/examples/completion.zsh
 ssource /usr/share/doc/fzf/examples/key-bindings.zsh
 
-dir_exists ~/.zsh/alias-tips || shallow_clone  https://github.com/djui/alias-tips.git ~/.zsh/alias-tips
+dir_exists ~/.zsh/alias-tips || sclone  https://github.com/djui/alias-tips.git ~/.zsh/alias-tips --depth=1
 ssource ~/.zsh/alias-tips/alias-tips.plugin.zsh
 
 if has_cmd fasd; then
