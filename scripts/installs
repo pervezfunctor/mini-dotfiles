@@ -102,7 +102,7 @@ pnpm_install() {
         echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf > /dev/null && sudo sysctl -p
     fi
 
-    if has_cmd apt; then
+    if is_apt; then
         pnpm dlx playwright install-deps
         pnpm dlx playwright install
     fi
@@ -144,9 +144,9 @@ fonts_install() {
     monaspace_install
     nerd_font_install
 
-    if has_cmd apt; then
+    if is_apt; then
         apti fonts-cascadia-code fonts-jetbrains-mono
-    elif has_cmd dnf; then
+    elif is_rh; then
         dnfi cascadia-fonts-all jetbrains-mono-fonts-all
     fi
 
@@ -186,9 +186,9 @@ emacs_install() {
 
     doom_install
 
-    if has_cmd apt-get; then
+    if is_apt; then
       apti -y emacs
-    elif has_cmd dnf; then
+    elif is_rh; then
         dnfi emacs
     fi
 

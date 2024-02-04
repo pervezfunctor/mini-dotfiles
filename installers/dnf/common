@@ -18,7 +18,7 @@ essential_install() {
 
     slog "Installing essential packages"
 
-    sudo dnf config-manager --set-enabled crb
+    # sudo dnf config-manager --set-enabled crb
 
     dnfi curl wget git trash-cli tree fzf ripgrep tmux pkg-config urlview
     dnfi neovim zsh zsh-syntax-highlighting zsh-autosuggestions fd-find

@@ -140,7 +140,6 @@ is_apt() {
     is_ubuntu || is_debian
 }
 
-
 is_fedora() {
    [ -e /etc/redhat-release ] && grep 'Fedora' /etc/redhat-release > /dev/null
 }
