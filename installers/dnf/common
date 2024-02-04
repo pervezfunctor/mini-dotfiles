@@ -23,7 +23,7 @@ essential_install() {
     dnfi curl wget git trash-cli tree fzf ripgrep tmux pkg-config urlview
     dnfi neovim zsh zsh-syntax-highlighting zsh-autosuggestions fd-find
     dnfi unar unzip p7zip zoxide ShellCheck git-extras zip gawk
-    dnfi python3-pip python3-virtualenv xclip xsel
+    dnfi python3-pip python3-wheel python3-virtualenv xclip xsel sqlite-devel
 }
 
 snap_install() {
