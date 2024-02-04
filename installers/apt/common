@@ -90,7 +90,7 @@ neovim_install() {
       cargo install tree-sitter-cli
     elif has_cmd pnpm; then
       pnpm install -g tree-sitter-cli
-    else has_cmd npm; then
+    elif has_cmd npm; then
       npm install -g tree-sitter-cli
     else
       slog "tree-sitter-cli not installed"
