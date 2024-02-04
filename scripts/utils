@@ -264,7 +264,7 @@ bootstrap() {
     keep_sudo_running
     min_packages_for_installer
 
-      https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/scripts/installs
+    source_curl https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/scripts/installs
 
     if is_apt; then
         source_curl https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/installers/apt/common
