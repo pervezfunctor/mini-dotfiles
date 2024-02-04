@@ -270,7 +270,7 @@ bootstrap() {
     source_curl https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/scripts/installs
 
     if has_cmd apt; then
-        source_curl https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/installers/pt/common
+        source_curl https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/installers/apt/common
     elif has_cmd dnf; then
         source_curl https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/installers/dnf/common
     fi
