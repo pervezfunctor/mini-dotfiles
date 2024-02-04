@@ -212,7 +212,7 @@ keep_sudo_running() {
 
 download_to() {
     if has_cmd curl; then
-        curl -fsSL "$1" -o "$2"
+        curl -s "$1" -o "$2"
     elif has_cmd wget; then
         wget "$1" -O "$2"
     else
@@ -243,11 +243,11 @@ min_packages_for_installer() {
 
 source_curl() {
     slog "sourcing: $1"
-    source <(curl -fsSL "$1")
+    source <(curl -s "$1")
 }
 
 sh_curl() {
-    curl -fsSL "$1" | bash
+    curl -s "$1" | bash
 }
 
 bootstrap() {
@@ -264,7 +264,7 @@ bootstrap() {
     keep_sudo_running
     min_packages_for_installer
 
-    source_curl https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/scripts/installs
+      https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/scripts/installs
 
     if is_apt; then
         source_curl https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/installers/apt/common
