@@ -99,10 +99,6 @@ bottom_install() {
     slog "bottom installation done!"
 }
 
-neovim_install() {
-
-}
-
 vscode_install() {
     has_cmd code && return 1
 
