@@ -62,7 +62,7 @@ cpp_install() {
     slog "Installing C++"
 
     sudo dnf groupinstall "Development Tools" -y
-    dnfi cmake gcc-c++ clang llvm boost clang-tools-extra pre-commit
+    dnfi cmake gcc-c++ clang llvm boost boost-devel clang-tools-extra pre-commit
 
     has_cmd pip && pip install conan
 

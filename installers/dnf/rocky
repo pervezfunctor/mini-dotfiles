@@ -22,6 +22,7 @@ main() {
     pnpm_install
     astro_install
 
+    dnfi util-linux-user
     set_zsh_as_default
 }
 
