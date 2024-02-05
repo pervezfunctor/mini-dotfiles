@@ -4,9 +4,6 @@
 
 source <(curl -s https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/scripts/utils)
 
-cockpit_install() {
-    apti cockpit
-}
 
 main() {
     dotfiles_install
@@ -15,8 +12,9 @@ main() {
 
     cpp_install
     docker_install
+    cockpit_install
 
-    apti cockpit gh gdu micro
+    apti gh gdu micro
 
     go_install
 
