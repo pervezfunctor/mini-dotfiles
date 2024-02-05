@@ -9,7 +9,15 @@ dnfi() {
     done
 }
 
+enable_epel() {
+    slog "Enabling EPEL"
+    sudo dnf config-manager --set-enabled crb
+    dnfi epel-release
+}
+
 essential_install() {
+    is_fedora || enable_epel
+
     slog "Updating packages"
 
     if ! { sudo dnf update -y && sudo dnf upgrade -y; }; then

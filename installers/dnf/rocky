@@ -4,12 +4,6 @@
 
 source <(curl -s https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/scripts/utils)
 
-enable_epel() {
-    sudo dnf config-manager --set-enabled crb
-    dnfi epel-release
-    dnfi trash-cli
-}
-
 main() {
     enable_epel
 
