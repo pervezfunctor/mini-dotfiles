@@ -5,8 +5,6 @@
 source <(curl -s https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/scripts/utils)
 
 main() {
-    enable_epel
-
     dotfiles_install
     essential_install
 
