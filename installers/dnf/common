@@ -18,8 +18,6 @@ essential_install() {
 
     slog "Installing essential packages"
 
-    # sudo dnf config-manager --set-enabled crb
-
     dnfi curl wget git trash-cli tree fzf ripgrep tmux pkg-config urlview
     dnfi neovim zsh zsh-syntax-highlighting zsh-autosuggestions fd-find
     dnfi unar unzip p7zip zoxide ShellCheck git-extras zip gawk
@@ -128,7 +126,7 @@ docker_install() {
 
     dnfi dnf-plugins-core
     sudo dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-    sudo dnf install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+    dnfi docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
     docker_common_install
 

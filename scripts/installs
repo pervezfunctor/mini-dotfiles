@@ -50,7 +50,7 @@ micro_install() {
     slog "Installing micro"
 
     curl https://getmic.ro | bash
-    sudo fmv micro /usr/bin/
+    sudo mv micro /usr/bin/
 
     slog "micro installation done!"
 }

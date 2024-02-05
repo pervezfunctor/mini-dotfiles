@@ -4,11 +4,17 @@
 
 source <(curl -s https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/scripts/utils)
 
-main() {
-    dotfiles_install
+enable_epel() {
+    sudo dnf config-manager --set-enabled crb
+    dnfi epel-release
+    dnfi trash-cli
+}
 
+main() {
+    enable_epel
+
+    dotfiles_install
     essential_install
-    # dnfi qemu-guest-agent
 
     cpp_install
     docker_install
