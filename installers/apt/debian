@@ -21,7 +21,8 @@ main() {
     go install github.com/jesseduffield/lazygit@latest
     # bottom_install
 
-    zsh_install
+    zsh_config_install
+    tmux_config_install
     code_server_install
     pnpm_install
 

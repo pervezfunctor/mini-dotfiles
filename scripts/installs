@@ -32,7 +32,7 @@ code_server_install() {
     # slog "coder installation done!"
 }
 
-zsh_install() {
+zsh_config_install() {
     slog "Installing zsh"
 
     smd ~/.zsh
@@ -42,6 +42,12 @@ zsh_install() {
     fln "${DOT_DIR}/configs/zshrc" ~/.zshrc
 
     slog "zsh installation done!"
+}
+
+tmux_config_install() {
+    slog "tmux config"
+    smd ~/.config/tmux
+    fln "${DOT_DIR}/configs/tmux.conf" ~/.config/tmux/tmux.conf
 }
 
 micro_install() {

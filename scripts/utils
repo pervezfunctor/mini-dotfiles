@@ -96,6 +96,25 @@ srm() {
     done
 }
 
+scp() {
+    if [ -e "$1" ]; then
+        cp -r "$1" "$2"
+    else
+        slog "$1 does not exist, cannot copy to $2"
+        return 1
+    fi
+}
+
+fcp() {
+    if [ -e "$1" ]; then
+        srm "$2"
+    else
+        slog "$1 does not exist, cannot copy to $2"
+        return 1
+    fi
+    cp -r "$1" "$2"
+}
+
 fmv() {
     if [ -e "$1" ]; then
         srm "$2"
@@ -167,7 +186,6 @@ is_linux() {
 is_mac() {
     [[ "$OSTYPE" == "darwin"* ]]
 }
-
 
 pre_dir_check() {
     for dir in "$@"; do

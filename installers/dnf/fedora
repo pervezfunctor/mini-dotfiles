@@ -45,8 +45,10 @@ main() {
     snap_install
 
     dotfiles_install
+    tmux_config_install
 
-    zsh_install
+    zsh_config_install
+    tmux_config_install
     docker_install
     lxd_install
     cpp_fedora_install

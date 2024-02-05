@@ -42,7 +42,8 @@ main() {
     brew_install
     dotfiles_install
 
-    zsh_install
+    zsh_config_install
+    tmux_config_install
     go_install
     docker_install
     lxd_install

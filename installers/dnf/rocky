@@ -17,7 +17,8 @@ main() {
     bottom_install
 
     micro_install
-    zsh_install
+    zsh_config_install
+    tmux_config_install
     code_server_install
     pnpm_install
     astro_install
