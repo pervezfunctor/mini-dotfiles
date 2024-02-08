@@ -227,3 +227,33 @@ docker_common_install() {
 }
 
 }
+
+conan_install() {
+    has_cmd conan && return 1
+
+    python3 -m pip install --upgrade pip setuptools
+    python3 -m pip install conan
+}
+
+cmake_install() {
+    has_cmd /usr/local/bin/cmake && return 1
+
+    CMAKE_VERSION="3.28.3"
+    ARCH=$(uname -m)
+    CMAKE_BINARY_NAME="cmake-${CMAKE_VERSION}-linux-${ARCH}.sh"
+    CMAKE_CHECKSUM_NAME="cmake-${CMAKE_VERSION}-SHA-256.txt"
+
+    TMP_DIR=$(mktemp -d -t cmake-XXXXXXXXXX)
+    cd "${TMP_DIR}"
+    curl -sSL "https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/${CMAKE_BINARY_NAME}" -O
+    curl -sSL "https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/${CMAKE_CHECKSUM_NAME}" -O
+
+    sha256sum -c --ignore-missing "${CMAKE_CHECKSUM_NAME}"
+    sh "${TMP_DIR}/${CMAKE_BINARY_NAME}" --prefix=/opt/cmake --skip-license
+
+    sudo ln -s /opt/cmake/bin/cmake /usr/local/bin/cmake
+    sudo ln -s /opt/cmake/bin/ctest /usr/local/bin/ctest
+    srm "${TMP_DIR}"
+
+}
+

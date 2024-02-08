@@ -8,10 +8,9 @@ sys_install() {
     sudo dnf groupinstall -y --with-optional "virtualization"
     sudo dnf groupinstall -y --with-optional "System Tools"
 
-    dnfi toolbox buildah distrobox
+    dnfi toolbox buildah distrobox podman
 
-    sudo systemctl start libvirtd
-    sudo systemctl enable libvirtd
+    sudo systemctl enable --now libvirtd
 }
 
 cpp_fedora_install() {

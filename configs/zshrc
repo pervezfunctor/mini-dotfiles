@@ -36,6 +36,10 @@ ssource() {
     fi
 }
 
+spath_export() {
+    export PATH="$1:$PATH"
+}
+
 dir_exists ~/.zsh/pure || git clone --depth=1 https://github.com/sindresorhus/pure.git ~/.zsh/pure
 
 fpath+=($HOME/.zsh/pure)
@@ -162,13 +166,14 @@ alias -g ......="../../../../../"
 ssource "$HOME/.cargo/env"
 
 export DOTNET_ROOT="$HOME/.dotnet"
-export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
-export PATH="$PATH:/usr/local/go/bin"
-export PATH="$PATH:/.local/bin"
 
+spath_export "/usr/bin"
+spath_export "/snap/bin"
+spath_export "/home/linuxbrew/.linuxbrew/bin"
+spath_export "$HOME/.config/emacs/bin"
+spath_export "$HOME/.local/bin"
+spath_export "$HOME/.config/Code/User/globalStorage/ms-vscode-remote.remote-containers/cli-bin"
 # export DOCKER_HOST=unix:///run/user/1000/docker.sock
-export PATH="/usr/bin:$PATH"
-export PATH="/snap/bin:$PATH"
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!

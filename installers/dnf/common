@@ -62,9 +62,14 @@ cpp_install() {
     slog "Installing C++"
 
     sudo dnf groupinstall "Development Tools" -y
-    dnfi cmake gcc-c++ clang llvm boost boost-devel catch-devel clang-tools-extra pre-commit
+    dnfi gcc gdb valgrind systemtap ltrace strace
+    dnfi gcc-c++ clang clang-devel clang-tools-extra clang-libs
+    dnfi boost boost-devel boost-static catch-devel
+    dnfi clang-analyzer lldb lld llvm llvm-devel
+    dnfi doxygen graphviz ccache cppcheck pre-commit
 
-    has_cmd pip && pip install conan
+    conan_install
+    cmake_install
 
     slog "C++ installation done!"
 }
@@ -119,7 +124,7 @@ cockpit_install() {
 
     slog "Installing cockpit"
 
-    dnfi cockpit
+    dnfi cockpit cockpit-file-sharing cockpit-machines cockpit-pcp cockpit-podman cockpit-storaged
     sudo systemctl enable --now cockpit.socket
     sudo firewall-cmd --add-service=cockpit
     sudo firewall-cmd --add-service=cockpit --permanent

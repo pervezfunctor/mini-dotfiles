@@ -7,10 +7,12 @@ source <(curl -s https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/m
 
 sys_install() {
     apti virt-manager buildah
-    dnfi toolbox distrobox
+    apti toolbox distrobox podman
 
     sudo systemctl start libvirtd
     sudo systemctl enable libvirtd
+
+    sudo systemctl enable --now libvirtd
 }
 
 flatpak_apps_install() {
@@ -20,10 +22,11 @@ flatpak_apps_install() {
     flatpak install -y --user flathub com.google.Chrome
     flatpak install -y --user flathub org.deluge_torrent.deluge
     flatpak install -y --user flathub us.zoom.Zoom
+    flatpak install -y --user org.wezfurlong.wezterm
 }
 
 apps_install() {
-    dnfi virt-manager chromium-browser emacs
+    apti chromium-browser emacs
     neovim_install
     emacs_install
     flatpak_apps_install

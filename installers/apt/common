@@ -35,9 +35,10 @@ essential_install() {
 cpp_install() {
     slog "Installing C++"
 
-    apti cmake g++ clang llvm libboost-all-dev clang-tidy clang-format clang-tools pre-commit
+    apti g++ clang llvm libboost-all-dev clang-tidy clang-format clang-tools pre-commit
 
-    has_cmd pip && pip install conan
+    cmake_install
+    conan_install
 
     slog "C++ installation done!"
 }

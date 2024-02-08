@@ -11,6 +11,7 @@ main() {
     tmux_config_install
     micro_install
 
+    has_cmd chsh || dnfi util-linux-user
     set_zsh_as_default
 }
 
