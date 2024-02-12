@@ -3,7 +3,7 @@
 ## MacOS
 
 ```bash
-bash -c "$(curl -sSL https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/installers/macos/desktop)"
+zsh -c "$(curl -sSL https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/installers/macos/desktop)"
 ```
 
 ## Rocky Linux
