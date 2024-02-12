@@ -1,0 +1,21 @@
+#! /usr/bin/env bash
+
+{
+
+source <(curl -s https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/scripts/utils)
+
+main() {
+    slog "Install xcode"
+    xcode-select --install
+
+    brew_install
+
+    mac_essential_install
+    mac_cpp_install
+}
+
+is_mac || err_exit "This script works only on macos. Quitting."
+
+bootstrap "Macos setup"
+
+}

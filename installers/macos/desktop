@@ -1,0 +1,37 @@
+#! /usr/bin/env bash
+
+{
+
+source <(curl -s https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/scripts/utils)
+
+apps_install() {
+    brew install --cask telegram
+    brew install --cask zoom
+    brew install --cask jetbrains-toolbox
+    brew install --cask google-chrome
+    brew install deluge
+}
+
+main() {
+    slog "Install xcode"
+    xcode-select --install
+
+    brew_install
+
+    mac_essential_install
+    mac_cpp_install
+    mac_neovim_install
+    pnpm_install
+
+    brew install visual-studio-code
+
+    dotfiles_install
+    zsh_config_install
+    tmux_config_install
+}
+
+is_mac || err_exit "This script works only on macos. Quitting."
+
+bootstrap "Macos setup"
+
+}
