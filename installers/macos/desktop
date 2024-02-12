@@ -24,6 +24,7 @@ main() {
     pnpm_install
 
     brew install visual-studio-code
+    apps_install
 
     dotfiles_install
     zsh_config_install
