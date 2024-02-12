@@ -1,36 +1,42 @@
 # Ilm development environment
 
-## Install Rocky Linux
+## MacOS
+
+```bash
+bash -c "$(curl -sSL https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/installers/macos/desktop)"
+```
+
+## Rocky Linux
 
 ```bash
 bash -c "$(curl -sSL https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/installers/dnf/rocky)"
 ```
 
-## Install Fedora
+## Fedora
 
 ```bash
 bash -c "$(curl -sSL https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/installers/dnf/fedora)"
 ```
 
-## Install Ubuntu
+## Ubuntu
 
 ```bash
 bash -c "$(curl -sSL https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/installers/apt/ubuntu)"
 ```
 
-## Install Debian
+## Debian
 
 ```bash
 bash -c "$(curl -sSL https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/installers/apt/debian)"
 ```
 
-## Minimal install on fedora/rocky
+## Minimal installation on Fedora/Rocky
 
 ```bash
 bash -c "$(curl -sSL https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/installers/dnf/min)"
 ```
 
-## Minimal install on ubuntu/debian
+## Minimal installation on Ubuntu/Debian
 
 ```bash
 bash -c "$(curl -sSL https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/installers/apt/min)"

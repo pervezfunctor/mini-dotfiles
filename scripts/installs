@@ -193,6 +193,10 @@ emacs_install() {
       apti -y emacs
     elif is_rh; then
         dnfi emacs
+    elif is_mac; then
+        brew tap railwaycat/emacsmacport
+        brew install emacs-mac --with-modules
+        ln -s /usr/local/opt/emacs-mac/Emacs.app /Applications/Emacs.app
     fi
 
     slog "emacs installation done!"

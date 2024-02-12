@@ -173,7 +173,12 @@ spath_export "/home/linuxbrew/.linuxbrew/bin"
 spath_export "$HOME/.config/emacs/bin"
 spath_export "$HOME/.local/bin"
 spath_export "$HOME/.config/Code/User/globalStorage/ms-vscode-remote.remote-containers/cli-bin"
-# export DOCKER_HOST=unix:///run/user/1000/docker.sock
+
+# if is_mac; then
+#     export DOCKER_HOST='unix://$HOME/.local/share/containers/podman/machine/qemu/podman.sock'
+# else
+#     # export DOCKER_HOST=unix:///run/user/1000/docker.sock
+# fi
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
@@ -301,3 +306,10 @@ bindkey '^I' complete-word
 ## Fix weird sequence that rxvt produces
 #bindkey -s '^[[Z' '\t'
 #
+
+# take parameters from the command line and pass it to git push
+function safe_push() {
+    git stash -u && git push "$@" && git stash pop
+}
+
+alias gpp=safe_push "$@"

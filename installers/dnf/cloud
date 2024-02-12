@@ -1,0 +1,33 @@
+#! /usr/bin/env bash
+
+{
+
+source <(curl -s https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/scripts/utils)
+
+main() {
+    dotfiles_install
+    essential_install
+
+    gh_install
+    micro_install
+
+    zsh_config_install
+    tmux_config_install
+
+    cpp_install
+
+    pnpm_install
+    lazygit_install
+    gdu_install
+    bottom_install
+    astro_install
+
+    dnfi util-linux-user
+    set_zsh_as_default
+}
+
+is_rocky|| err_exit "This installer works only on Rocky Linux. Quitting."
+
+bootstrap "Rocky Linux development system"
+
+}

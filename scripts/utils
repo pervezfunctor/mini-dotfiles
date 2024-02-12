@@ -139,6 +139,10 @@ sln() {
     ln -s "$1" "$2"
 }
 
+is_mac() {
+    [[ "$OSTYPE" == "darwin"* ]]
+}
+
 is_debian() {
     has_cmd lsb_release || return 1
 
@@ -258,8 +262,6 @@ min_packages_for_installer() {
     elif is_rh; then
         slog "Installing essential packages for the installer for fedora"
         sudo dnf install -y curl wget git-core tar unzip
-    else
-        err_exit "This installer works only on Debian/Ubuntu or Fedora/Rocky/CentOS"
     fi
 }
 
@@ -292,6 +294,8 @@ bootstrap() {
         source_curl https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/installers/apt/common
     elif is_rh; then
         source_curl https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/installers/dnf/common
+    elif is_mac; then
+        source_curl https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/installers/macos/common
     fi
 
     main "$@" > >(tee /tmp/.seartipy-output.log) 2> >(tee /tmp/.seartipy-error.log >&2)
