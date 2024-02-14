@@ -191,7 +191,6 @@ is_mac() {
     [[ "$OSTYPE" == "darwin"* ]]
 }
 
-
 fn_exists() {
     [[ $(type -t $1) == function ]]
 }
