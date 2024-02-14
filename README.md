@@ -21,6 +21,7 @@ bash -c "$(curl -sSL https://raw.githubusercontent.com/pervezfunctor/mini-dotfil
 ## Ubuntu
 
 ```bash
+sudo apt install -y curl
 bash -c "$(curl -sSL https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/installers/apt/ubuntu)"
 ```
 
@@ -40,6 +41,7 @@ bash -c "$(curl -sSL https://raw.githubusercontent.com/pervezfunctor/mini-dotfil
 ## Minimal installation on Ubuntu/Debian
 
 ```bash
+sudo apt install -y curl
 bash -c "$(curl -sSL https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/installers/apt/min)"
 ```
 
