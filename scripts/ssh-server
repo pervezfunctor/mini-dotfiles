@@ -1,0 +1,36 @@
+#!/bin/bash
+
+{
+# Check if the script is run as root
+if [ "$(id -u)" != "0" ]; then
+   echo "This script must be run as root" 1>&2
+   exit 1
+fi
+
+# Determine the package manager
+if [ -f "/etc/debian_version" ]; then
+    pkg_manager="apt-get"
+    ssh_service="ssh"
+elif [ -f "/etc/redhat-release" ]; then
+    pkg_manager="dnf"
+    ssh_service="sshd"
+else
+    echo "Unsupported system"
+    exit 1
+fi
+
+# Check if SSH server is installed
+if ! command -v sshd &> /dev/null; then
+    echo "SSH server is not installed. Installing now..."
+    $pkg_manager install -y openssh-server
+else
+    echo "SSH server is already installed."
+fi
+
+# Start the SSH server
+systemctl start $ssh_service
+systemctl enable $ssh_service
+
+echo "SSH server is now running."
+
+}
