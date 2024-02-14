@@ -144,4 +144,18 @@ docker_install() {
   slog "Docker installation done!"
 }
 
+cockpit_install() {
+    has_cmd cockpit && return 1
+
+    slog "Installing cockpit"
+
+    apti cockpit cockpit-file-sharing cockpit-machines cockpit-sosreport cockpit-pcp cockpit-podman cockpit-storaged
+    sudo systemctl enable --now cockpit.socket
+    sudo firewall-cmd --add-service=cockpit
+    sudo firewall-cmd --add-service=cockpit --permanent
+
+    slog "cockpit installation done!"
+}
+
+
 }
