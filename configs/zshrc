@@ -155,6 +155,8 @@ alias ss='nala search'
 alias md="mkdir -p"
 alias rd="rmdir"
 
+alias ipa="ip -brief a"
+
 alias -g ..="../"
 alias -g ...="../../"
 alias -g ....="../../../"
