@@ -27,6 +27,7 @@ bash -c "$(curl -sSL https://raw.githubusercontent.com/pervezfunctor/mini-dotfil
 ## Debian
 
 ```bash
+sudo apt install -y curl
 bash -c "$(curl -sSL https://raw.githubusercontent.com/pervezfunctor/mini-dotfiles/master/installers/apt/debian)"
 ```
 

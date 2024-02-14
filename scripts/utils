@@ -144,11 +144,12 @@ is_mac() {
 }
 
 is_debian() {
-    has_cmd lsb_release || return 1
+    [[ -f "/etc/debian_version" ]]
+    # has_cmd lsb_release || return 1
 
-    local OS
-    OS=$(lsb_release -i | cut -d ':' -f2)
-    [[ "$OS" == *"Debian" ]]
+    # local OS
+    # OS=$(lsb_release -i | cut -d ':' -f2)
+    # [[ "$OS" == *"Debian" ]]
 }
 
 is_wsl() {
