@@ -151,8 +151,6 @@ cockpit_install() {
 
     apti cockpit cockpit-file-sharing cockpit-machines cockpit-sosreport cockpit-pcp cockpit-podman cockpit-storaged
     sudo systemctl enable --now cockpit.socket
-    sudo firewall-cmd --add-service=cockpit
-    sudo firewall-cmd --add-service=cockpit --permanent
 
     slog "cockpit installation done!"
 }
