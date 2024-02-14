@@ -15,6 +15,6 @@ main() {
     done
 }
 
-bootstrap "seartipy installer"
+bootstrap "$@"
 
 }
