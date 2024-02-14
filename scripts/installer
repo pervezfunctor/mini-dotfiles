@@ -13,6 +13,6 @@ main() {
     done
 }
 
-bootstrap "seartipy setup"
+bootstrap "seartipy installer"
 
 }
