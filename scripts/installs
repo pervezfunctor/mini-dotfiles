@@ -69,6 +69,13 @@ rust_install() {
     slog "rust installation done!"
 }
 
+alacritty_install() {
+    has_cmd alacritty && return 1
+
+    rust_install
+    cargo install alacritty
+}
+
 miniconda_install() {
     has_cmd conda && return 0
     dir_exists ~/miniconda3 && return 0
@@ -216,7 +223,6 @@ git_config() {
 
 go_install() {
     has_cmd go && return 1
-
     slog "Installing go"
     srm /usr/local/go && tar -C /usr/local -xzf go1.21.6.linux-amd64.tar.gz
     slog "go installation done!"
@@ -228,8 +234,6 @@ docker_common_install() {
 
   sudo systemctl --now enable docker
   sudo systemctl --now enable containerd
-}
-
 }
 
 conan_install() {
@@ -262,3 +266,4 @@ cmake_install() {
 
 }
 
+}
